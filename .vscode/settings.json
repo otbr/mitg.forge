@@ -73,6 +73,8 @@
 		"namelocks",
 		"offlinetraining",
 		"oldnames",
+		"oncreate",
+		"ondelete",
 		"onlinetime",
 		"openssl",
 		"orpc",
