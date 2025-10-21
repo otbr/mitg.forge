@@ -1,0 +1,12 @@
+.git
+**/node_modules
+**/dist
+.turbo
+.next
+.cache
+coverage
+__generated__
+generated
+.vscode
+.DS_Store
+.env*
