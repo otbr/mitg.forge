@@ -1,5 +1,4 @@
 -- CreateTable
-
 CREATE TABLE `account_ban_history` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `account_id` INTEGER UNSIGNED NOT NULL,
@@ -14,7 +13,6 @@ CREATE TABLE `account_ban_history` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `account_bans` (
     `account_id` INTEGER UNSIGNED NOT NULL,
     `reason` VARCHAR(255) NOT NULL,
@@ -27,7 +25,6 @@ CREATE TABLE `account_bans` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `account_sessions` (
     `id` VARCHAR(191) NOT NULL,
     `account_id` INTEGER UNSIGNED NOT NULL,
@@ -37,7 +34,6 @@ CREATE TABLE `account_sessions` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `account_vipgrouplist` (
     `account_id` INTEGER UNSIGNED NOT NULL,
     `player_id` INTEGER NOT NULL,
@@ -46,11 +42,11 @@ CREATE TABLE `account_vipgrouplist` (
     INDEX `account_id`(`account_id`),
     INDEX `player_id`(`player_id`),
     INDEX `vipgroup_id`(`vipgroup_id`),
+    INDEX `account_vipgrouplist_vipgroup_fk`(`vipgroup_id`, `account_id`),
     UNIQUE INDEX `account_vipgrouplist_unique`(`account_id`, `player_id`, `vipgroup_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `account_vipgroups` (
     `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
     `account_id` INTEGER UNSIGNED NOT NULL,
@@ -62,7 +58,6 @@ CREATE TABLE `account_vipgroups` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `account_viplist` (
     `account_id` INTEGER UNSIGNED NOT NULL,
     `player_id` INTEGER NOT NULL,
@@ -76,7 +71,6 @@ CREATE TABLE `account_viplist` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `accounts` (
     `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(32) NOT NULL,
@@ -98,7 +92,6 @@ CREATE TABLE `accounts` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `boosted_boss` (
     `boostname` TEXT NULL,
     `date` VARCHAR(250) NOT NULL DEFAULT '',
@@ -116,7 +109,6 @@ CREATE TABLE `boosted_boss` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `boosted_creature` (
     `boostname` TEXT NULL,
     `date` VARCHAR(250) NOT NULL DEFAULT '',
@@ -133,7 +125,6 @@ CREATE TABLE `boosted_creature` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `coins_transactions` (
     `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
     `account_id` INTEGER UNSIGNED NOT NULL,
@@ -148,7 +139,6 @@ CREATE TABLE `coins_transactions` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `daily_reward_history` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `daystreak` SMALLINT NOT NULL DEFAULT 0,
@@ -161,7 +151,6 @@ CREATE TABLE `daily_reward_history` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `forge_history` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -179,7 +168,6 @@ CREATE TABLE `forge_history` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `global_storage` (
     `key` VARCHAR(32) NOT NULL,
     `value` TEXT NOT NULL,
@@ -188,7 +176,6 @@ CREATE TABLE `global_storage` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `guild_invites` (
     `player_id` INTEGER NOT NULL DEFAULT 0,
     `guild_id` INTEGER NOT NULL DEFAULT 0,
@@ -199,7 +186,6 @@ CREATE TABLE `guild_invites` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `guild_membership` (
     `player_id` INTEGER NOT NULL,
     `guild_id` INTEGER NOT NULL,
@@ -212,7 +198,6 @@ CREATE TABLE `guild_membership` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `guild_ranks` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `guild_id` INTEGER NOT NULL,
@@ -224,7 +209,6 @@ CREATE TABLE `guild_ranks` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `guild_wars` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `guild1` INTEGER NOT NULL DEFAULT 0,
@@ -244,7 +228,6 @@ CREATE TABLE `guild_wars` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `guilds` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `level` INTEGER NOT NULL DEFAULT 1,
@@ -262,7 +245,6 @@ CREATE TABLE `guilds` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `guildwar_kills` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `killer` VARCHAR(50) NOT NULL,
@@ -277,7 +259,6 @@ CREATE TABLE `guildwar_kills` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `house_lists` (
     `house_id` INTEGER NOT NULL,
     `listid` INTEGER NOT NULL,
@@ -290,7 +271,6 @@ CREATE TABLE `house_lists` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `houses` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `owner` INTEGER NOT NULL,
@@ -317,7 +297,6 @@ CREATE TABLE `houses` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `ip_bans` (
     `ip` INTEGER NOT NULL,
     `reason` VARCHAR(255) NOT NULL,
@@ -330,7 +309,6 @@ CREATE TABLE `ip_bans` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `kv_store` (
     `key_name` VARCHAR(191) NOT NULL,
     `timestamp` BIGINT NOT NULL,
@@ -340,7 +318,6 @@ CREATE TABLE `kv_store` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `market_history` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -358,7 +335,6 @@ CREATE TABLE `market_history` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `market_offers` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -377,7 +353,6 @@ CREATE TABLE `market_offers` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_bosstiary` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -391,7 +366,6 @@ CREATE TABLE `player_bosstiary` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_charms` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -410,7 +384,6 @@ CREATE TABLE `player_charms` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_deaths` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -430,7 +403,6 @@ CREATE TABLE `player_deaths` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_depotitems` (
     `player_id` INTEGER NOT NULL,
     `sid` INTEGER NOT NULL,
@@ -443,7 +415,6 @@ CREATE TABLE `player_depotitems` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_hirelings` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -464,7 +435,6 @@ CREATE TABLE `player_hirelings` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_inboxitems` (
     `player_id` INTEGER NOT NULL,
     `sid` INTEGER NOT NULL,
@@ -477,7 +447,6 @@ CREATE TABLE `player_inboxitems` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_items` (
     `player_id` INTEGER NOT NULL DEFAULT 0,
     `pid` INTEGER NOT NULL DEFAULT 0,
@@ -492,7 +461,6 @@ CREATE TABLE `player_items` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_kills` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -505,7 +473,6 @@ CREATE TABLE `player_kills` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_mounts` (
     `player_id` INTEGER NOT NULL DEFAULT 0,
     `mount_id` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
@@ -514,7 +481,6 @@ CREATE TABLE `player_mounts` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_namelocks` (
     `player_id` INTEGER NOT NULL,
     `reason` VARCHAR(255) NOT NULL,
@@ -526,7 +492,6 @@ CREATE TABLE `player_namelocks` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_oldnames` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -540,7 +505,6 @@ CREATE TABLE `player_oldnames` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_outfits` (
     `player_id` INTEGER NOT NULL DEFAULT 0,
     `outfit_id` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
@@ -550,7 +514,6 @@ CREATE TABLE `player_outfits` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_prey` (
     `player_id` INTEGER NOT NULL,
     `slot` BOOLEAN NOT NULL,
@@ -568,7 +531,6 @@ CREATE TABLE `player_prey` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_rewards` (
     `player_id` INTEGER NOT NULL,
     `sid` INTEGER NOT NULL,
@@ -581,7 +543,6 @@ CREATE TABLE `player_rewards` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_spells` (
     `player_id` INTEGER NOT NULL,
     `name` VARCHAR(255) NOT NULL,
@@ -591,7 +552,6 @@ CREATE TABLE `player_spells` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_stash` (
     `player_id` INTEGER NOT NULL,
     `item_id` INTEGER NOT NULL,
@@ -601,7 +561,6 @@ CREATE TABLE `player_stash` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_statements` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `player_id` INTEGER NOT NULL,
@@ -616,7 +575,6 @@ CREATE TABLE `player_statements` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_storage` (
     `player_id` INTEGER NOT NULL DEFAULT 0,
     `key` INTEGER UNSIGNED NOT NULL DEFAULT 0,
@@ -626,7 +584,6 @@ CREATE TABLE `player_storage` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_taskhunt` (
     `player_id` INTEGER NOT NULL,
     `slot` BOOLEAN NOT NULL,
@@ -643,7 +600,6 @@ CREATE TABLE `player_taskhunt` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `player_wheeldata` (
     `player_id` INTEGER NOT NULL,
     `slot` BLOB NOT NULL,
@@ -653,7 +609,6 @@ CREATE TABLE `player_wheeldata` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `players` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
@@ -769,7 +724,6 @@ CREATE TABLE `players` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `players_online` (
     `player_id` INTEGER NOT NULL,
 
@@ -777,7 +731,6 @@ CREATE TABLE `players_online` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `server_config` (
     `config` VARCHAR(50) NOT NULL,
     `value` VARCHAR(256) NOT NULL DEFAULT '',
@@ -786,7 +739,6 @@ CREATE TABLE `server_config` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `store_history` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `account_id` INTEGER UNSIGNED NOT NULL,
@@ -803,7 +755,6 @@ CREATE TABLE `store_history` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `tile_store` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `house_id` INTEGER NOT NULL,
@@ -814,7 +765,6 @@ CREATE TABLE `tile_store` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-
 CREATE TABLE `towns` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,

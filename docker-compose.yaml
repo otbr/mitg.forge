@@ -5,6 +5,7 @@ services:
     image: mariadb
     container_name: miforge_database
     restart: unless-stopped
+    user: root
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: miforge
@@ -14,6 +15,18 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+
+  db_init:
+    image: alpine:3.20
+    depends_on:
+      - miforge_database
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "apk add --no-cache mariadb-client &&
+       until mariadb -hmiforge_database -uroot -proot -e 'SELECT 1'; do sleep 1; done &&
+       mariadb -hmiforge_database -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS miforge_shadow;' &&
+       echo 'shadow DB OK' "
+    restart: "no"
 
 volumes:
   db_data:
