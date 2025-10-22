@@ -1,6 +1,7 @@
 import { cors } from "hono/cors";
+import { env } from "@/env";
 
-const allowedOrigins = new Set(["http://localhost:3000"]);
+const allowedOrigins = new Set(env.ALLOWED_ORIGINS);
 
 export function honoCors() {
 	return cors({
