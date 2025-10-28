@@ -30,7 +30,6 @@ model account_sessions {
   expires    BigInt @db.UnsignedBigInt
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model account_vipgrouplist {
   account_id        Int               @db.UnsignedInt
   player_id         Int
@@ -44,7 +43,6 @@ model account_vipgrouplist {
   @@index([vipgroup_id], map: "vipgroup_id")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model account_vipgroups {
   id                   Int                    @default(autoincrement()) @db.UnsignedInt
   account_id           Int                    @db.UnsignedInt
@@ -57,13 +55,12 @@ model account_vipgroups {
   @@index([account_id], map: "account_vipgroups_accounts_fk")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model account_viplist {
   account_id  Int      @db.UnsignedInt
   player_id   Int
   description String   @default("") @db.VarChar(128)
-  icon        Int      @default(0) @db.UnsignedTinyInt
-  notify      Boolean  @default(false)
+  icon        Int      @default(0) @db.UnsignedTinyInt // is unsigned
+  notify      Int      @default(0) @db.TinyInt
   accounts    accounts @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "account_viplist_account_fk")
   players     players  @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "account_viplist_player_fk")
 
@@ -80,7 +77,7 @@ model accounts {
   premdays            Int                   @default(0)
   premdays_purchased  Int                   @default(0)
   lastday             Int                   @default(0) @db.UnsignedInt
-  type                Boolean               @default(true)
+  type                Int                   @default(1) @db.UnsignedTinyInt
   coins               Int                   @default(0) @db.UnsignedInt
   coins_transferable  Int                   @default(0) @db.UnsignedInt
   tournament_coins    Int                   @default(0) @db.UnsignedInt
@@ -126,8 +123,8 @@ model boosted_creature {
 model coins_transactions {
   id          Int       @id @default(autoincrement()) @db.UnsignedInt
   account_id  Int       @db.UnsignedInt
-  type        Boolean
-  coin_type   Boolean   @default(true)
+  type        Int       @db.UnsignedTinyInt // is unsigned
+  coin_type   Int       @default(1) @db.UnsignedTinyInt // is unsigned
   amount      Int       @db.UnsignedInt
   description String    @db.VarChar(3500)
   timestamp   DateTime? @default(now()) @db.Timestamp(0)
@@ -192,7 +189,6 @@ model guild_membership {
   @@index([rank_id], map: "rank_id")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model guild_ranks {
   id               Int                @id @default(autoincrement())
   guild_id         Int
@@ -281,7 +277,7 @@ model houses {
   internal_bid    Int           @default(0)
   bid_end_date    Int           @default(0)
   state           Int           @default(0) @db.UnsignedSmallInt
-  transfer_status Boolean?      @default(false)
+  transfer_status Int?          @default(0) @db.TinyInt
   house_lists     house_lists[]
   tile_store      tile_store[]
 
@@ -309,13 +305,13 @@ model kv_store {
 model market_history {
   id         Int     @id @default(autoincrement())
   player_id  Int
-  sale       Boolean @default(false)
+  sale       Int     @default(0) @db.TinyInt
   itemtype   Int     @db.UnsignedInt
   amount     Int     @db.UnsignedSmallInt
   price      BigInt  @default(0) @db.UnsignedBigInt
   expires_at BigInt  @db.UnsignedBigInt
   inserted   BigInt  @db.UnsignedBigInt
-  state      Boolean
+  state      Int     @db.UnsignedTinyInt
   tier       Int     @default(0) @db.UnsignedTinyInt
   players    players @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "market_history_players_fk")
 
@@ -325,11 +321,11 @@ model market_history {
 model market_offers {
   id        Int     @id @default(autoincrement())
   player_id Int
-  sale      Boolean @default(false)
+  sale      Int     @default(0) @db.TinyInt
   itemtype  Int     @db.UnsignedInt
   amount    Int     @db.UnsignedSmallInt
   created   BigInt  @db.UnsignedBigInt
-  anonymous Boolean @default(false)
+  anonymous Int     @default(0) @db.TinyInt
   price     BigInt  @default(0) @db.UnsignedBigInt
   tier      Int     @default(0) @db.UnsignedTinyInt
   players   players @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "market_offers_players_fk")
@@ -374,11 +370,11 @@ model player_deaths {
   time                   BigInt  @default(0) @db.UnsignedBigInt
   level                  Int     @default(1)
   killed_by              String  @db.VarChar(255)
-  is_player              Boolean @default(true)
+  is_player              Int     @default(1) @db.TinyInt
   mostdamage_by          String  @db.VarChar(100)
-  mostdamage_is_player   Boolean @default(false)
-  unjustified            Boolean @default(false)
-  mostdamage_unjustified Boolean @default(false)
+  mostdamage_is_player   Int     @default(0) @db.TinyInt
+  unjustified            Int     @default(0) @db.TinyInt
+  mostdamage_unjustified Int     @default(0) @db.TinyInt
   players                players @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "player_deaths_players_fk")
 
   @@index([killed_by], map: "killed_by")
@@ -386,7 +382,6 @@ model player_deaths {
   @@index([player_id], map: "player_id")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model player_depotitems {
   player_id  Int
   sid        Int
@@ -444,13 +439,12 @@ model player_items {
   @@index([sid], map: "sid")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model player_kills {
   id        Int     @id @default(autoincrement())
   player_id Int
   time      BigInt  @default(0) @db.UnsignedBigInt
   target    Int
-  unavenged Boolean @default(false)
+  unavenged Int     @default(0) @db.TinyInt
   players   players @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "player_kills_players_fk")
 
   @@index([player_id], map: "player_kills_players_fk")
@@ -489,7 +483,7 @@ model player_oldnames {
 model player_outfits {
   player_id Int     @default(0)
   outfit_id Int     @default(0) @db.UnsignedSmallInt
-  addons    Boolean @default(false)
+  addons    Int     @default(0) @db.UnsignedTinyInt
   players   players @relation(fields: [player_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "player_outfits_players_fk")
 
   @@id([player_id, outfit_id])
@@ -497,12 +491,12 @@ model player_outfits {
 
 model player_prey {
   player_id        Int
-  slot             Boolean
-  state            Boolean
+  slot             Int     @db.TinyInt
+  state            Int     @db.TinyInt
   raceid           String  @db.VarChar(250)
-  option           Boolean
-  bonus_type       Boolean
-  bonus_rarity     Boolean
+  option           Int     @db.TinyInt
+  bonus_type       Int     @db.TinyInt
+  bonus_rarity     Int     @db.TinyInt
   bonus_percentage String  @db.VarChar(250)
   bonus_time       String  @db.VarChar(250)
   free_reroll      BigInt
@@ -566,11 +560,11 @@ model player_storage {
 
 model player_taskhunt {
   player_id     Int
-  slot          Boolean
-  state         Boolean
+  slot          Int     @db.TinyInt
+  state         Int     @db.TinyInt
   raceid        String  @db.VarChar(250)
-  upgrade       Boolean
-  rarity        Boolean
+  upgrade       Int     @db.TinyInt
+  rarity        Int     @db.TinyInt
   kills         String  @db.VarChar(250)
   disabled_time BigInt
   free_reroll   BigInt
@@ -619,8 +613,8 @@ model players {
   pronoun                                                  Int                    @default(0)
   lastlogin                                                BigInt                 @default(0) @db.UnsignedBigInt
   lastip                                                   Int                    @default(0) @db.UnsignedInt
-  save                                                     Boolean                @default(true)
-  skull                                                    Boolean                @default(false)
+  save                                                     Int                    @default(1) @db.TinyInt
+  skull                                                    Int                    @default(0) @db.TinyInt
   skulltime                                                BigInt                 @default(0)
   lastlogout                                               BigInt                 @default(0) @db.UnsignedBigInt
   blessings                                                Int                    @default(0) @db.TinyInt
@@ -673,24 +667,24 @@ model players {
   manashield                                               Int                    @default(0) @db.UnsignedInt
   max_manashield                                           Int                    @default(0) @db.UnsignedInt
   xpboost_stamina                                          Int?                   @db.UnsignedSmallInt
-  xpboost_value                                            Int?                   @db.UnsignedTinyInt
+  xpboost_value                                            Int?                   @db.UnsignedTinyInt // is unsigned
   marriage_status                                          BigInt                 @default(0) @db.UnsignedBigInt
   marriage_spouse                                          Int                    @default(-1)
   bonus_rerolls                                            BigInt                 @default(0)
   prey_wildcard                                            BigInt                 @default(0)
   task_points                                              BigInt                 @default(0)
-  quickloot_fallback                                       Boolean?               @default(false)
+  quickloot_fallback                                       Int                    @default(0) @db.TinyInt
   lookmountbody                                            Int                    @default(0) @db.UnsignedTinyInt
   lookmountfeet                                            Int                    @default(0) @db.UnsignedTinyInt
   lookmounthead                                            Int                    @default(0) @db.UnsignedTinyInt
   lookmountlegs                                            Int                    @default(0) @db.UnsignedTinyInt
   currentmount                                             Int                    @default(0) @db.UnsignedSmallInt
   lookfamiliarstype                                        Int                    @default(0) @db.UnsignedInt
-  isreward                                                 Boolean                @default(true)
-  istutorial                                               Boolean                @default(false)
+  isreward                                                 Int                    @default(1) @db.TinyInt
+  istutorial                                               Int                    @default(0) @db.TinyInt
   forge_dusts                                              BigInt                 @default(0)
   forge_dust_level                                         BigInt                 @default(100)
-  randomize_mount                                          Boolean                @default(false)
+  randomize_mount                                          Int                    @default(0) @db.TinyInt
   boss_points                                              Int                    @default(0)
   loyalty_points                                           Int                    @default(0) @db.UnsignedInt
   animus_mastery                                           Bytes?                 @db.MediumBlob
@@ -748,7 +742,7 @@ model store_history {
   account_id  Int      @db.UnsignedInt
   mode        Int      @default(0) @db.SmallInt
   description String   @db.VarChar(3500)
-  coin_type   Boolean  @default(false)
+  coin_type   Int      @default(0) @db.TinyInt
   coin_amount Int
   time        BigInt   @db.UnsignedBigInt
   timestamp   Int      @default(0)
