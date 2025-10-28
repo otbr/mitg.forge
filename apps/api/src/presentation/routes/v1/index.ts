@@ -1,7 +1,8 @@
 import { base } from "@/main/rpc/base";
+import { clientRouter } from "./client";
+import { pingRoute } from "./ping";
 
 export const router = base.router({
-	hello: base.handler(() => {
-		return { message: "Hello, world!" };
-	}),
+	ping: pingRoute,
+	client: clientRouter,
 });

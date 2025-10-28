@@ -37,7 +37,7 @@ export const generateOpenAPISpec = async () => {
 			title: "My Playground",
 			version: "1.0.0",
 		},
-		servers: [{ url: "/v1/api" } /** Should use absolute URLs in production */],
+		servers: [{ url: "/v1" } /** Should use absolute URLs in production */],
 		security: [{ bearerAuth: [] }],
 		components: {
 			securitySchemes: {

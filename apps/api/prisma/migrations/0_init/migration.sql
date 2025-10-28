@@ -42,7 +42,6 @@ CREATE TABLE `account_vipgrouplist` (
     INDEX `account_id`(`account_id`),
     INDEX `player_id`(`player_id`),
     INDEX `vipgroup_id`(`vipgroup_id`),
-    INDEX `account_vipgrouplist_vipgroup_fk`(`vipgroup_id`, `account_id`),
     UNIQUE INDEX `account_vipgrouplist_unique`(`account_id`, `player_id`, `vipgroup_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -713,6 +712,7 @@ CREATE TABLE `players` (
     `forge_dust_level` BIGINT NOT NULL DEFAULT 100,
     `randomize_mount` BOOLEAN NOT NULL DEFAULT false,
     `boss_points` INTEGER NOT NULL DEFAULT 0,
+    `loyalty_points` INTEGER UNSIGNED NOT NULL DEFAULT 0,
     `animus_mastery` MEDIUMBLOB NULL,
     `virtue` INTEGER UNSIGNED NOT NULL DEFAULT 0,
     `harmony` INTEGER UNSIGNED NOT NULL DEFAULT 0,

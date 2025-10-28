@@ -30,6 +30,7 @@ model account_sessions {
   expires    BigInt @db.UnsignedBigInt
 }
 
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model account_vipgrouplist {
   account_id        Int               @db.UnsignedInt
   player_id         Int
@@ -41,9 +42,9 @@ model account_vipgrouplist {
   @@index([account_id], map: "account_id")
   @@index([player_id], map: "player_id")
   @@index([vipgroup_id], map: "vipgroup_id")
-  @@index([vipgroup_id, account_id], map: "account_vipgrouplist_vipgroup_fk")
 }
 
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model account_vipgroups {
   id                   Int                    @default(autoincrement()) @db.UnsignedInt
   account_id           Int                    @db.UnsignedInt
@@ -56,6 +57,7 @@ model account_vipgroups {
   @@index([account_id], map: "account_vipgroups_accounts_fk")
 }
 
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model account_viplist {
   account_id  Int      @db.UnsignedInt
   player_id   Int
@@ -190,6 +192,7 @@ model guild_membership {
   @@index([rank_id], map: "rank_id")
 }
 
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model guild_ranks {
   id               Int                @id @default(autoincrement())
   guild_id         Int
@@ -365,7 +368,6 @@ model player_charms {
   @@index([player_id], map: "player_charms_players_fk")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model player_deaths {
   id                     Int     @id @default(autoincrement())
   player_id              Int
@@ -384,6 +386,7 @@ model player_deaths {
   @@index([player_id], map: "player_id")
 }
 
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model player_depotitems {
   player_id  Int
   sid        Int
@@ -689,6 +692,7 @@ model players {
   forge_dust_level                                         BigInt                 @default(100)
   randomize_mount                                          Boolean                @default(false)
   boss_points                                              Int                    @default(0)
+  loyalty_points                                           Int                    @default(0) @db.UnsignedInt
   animus_mastery                                           Bytes?                 @db.MediumBlob
   virtue                                                   Int                    @default(0) @db.UnsignedInt
   harmony                                                  Int                    @default(0) @db.UnsignedInt

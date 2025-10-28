@@ -1,4 +1,8 @@
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import {
+	createRootRouteWithContext,
+	HeadContent,
+	Outlet,
+} from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import type { RouterContext } from "@/router";
 import { env } from "@/sdk/env";
@@ -16,9 +20,21 @@ const TanStackRouterDevtools = lazy(() =>
 );
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+	head: () => ({
+		meta: [
+			{
+				title: "My App",
+			},
+			{
+				name: "description",
+				content: "My App is a web application",
+			},
+		],
+	}),
 	component: () => {
 		return (
 			<>
+				<HeadContent />
 				<Outlet />
 				{env.VITE_SHOW_DEVTOOLS && (
 					<Suspense fallback={null}>

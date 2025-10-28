@@ -12,4 +12,16 @@ export const env = cleanEnv(process.env, {
 	ALLOWED_ORIGINS: arrayFromString({
 		desc: "A comma-separated list of allowed origins for CORS",
 	}),
+	DATABASE_HOST: str({
+		desc: "Database host",
+	}),
+	DATABASE_USER: str({
+		desc: "Database user",
+	}),
+	DATABASE_PASSWORD: str({
+		desc: "Database password",
+	}),
+	DATABASE_NAME: str({
+		desc: "Database name",
+	}),
 });
