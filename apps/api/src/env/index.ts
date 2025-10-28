@@ -5,6 +5,15 @@ const arrayFromString = makeValidator<string[]>((input) => {
 });
 
 export const env = cleanEnv(process.env, {
+	LOG_LEVEL: str({
+		choices: ["debug", "info", "warn", "error"],
+		default: "info",
+		desc: "The logging level",
+	}),
+	SERVICE_NAME: str({
+		default: "miforge-api",
+		desc: "The name of this server",
+	}),
 	PORT: str({
 		default: "4000",
 		desc: "The port the server will listen on",

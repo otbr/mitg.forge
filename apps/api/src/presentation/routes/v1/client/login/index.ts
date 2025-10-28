@@ -1,41 +1,5 @@
-import z from "zod";
 import { base } from "@/main/rpc/base";
-
-const LoginSchema = z
-	.object({
-		assetversion: z.string().optional(),
-		clienttype: z.number().optional(),
-		clientversion: z.string().optional(),
-		devicecookie: z.string().optional(),
-		email: z.email(),
-		password: z.string(),
-		token: z.string().optional(),
-		stayloggedin: z.boolean().optional(),
-		type: z.literal("login").optional(),
-	})
-	.transform((data) => {
-		return {
-			assetVersion: data.assetversion,
-			clientType: data.clienttype,
-			clientVersion: data.clientversion,
-			deviceCookie: data.devicecookie,
-			stayLoggedIn: data.stayloggedin,
-			email: data.email,
-			password: data.password,
-			type: data.type,
-			token: data.token,
-		};
-	});
-
-const LoginFileSchema = z.instanceof(File).transform(async (file) => {
-	const contentType = file.type || "text/plain;charset=utf-8";
-	const m = /charset=([^;]+)/i.exec(contentType);
-	const encoding = m?.[1]?.toLowerCase() || "utf-8";
-	const abPromise = await file.arrayBuffer();
-	const textPromise = new TextDecoder(encoding).decode(abPromise);
-
-	return LoginSchema.parse(JSON.parse(textPromise));
-});
+import { ClientLoginSchema } from "./schema";
 
 export const loginRoute = base
 	.route({
@@ -45,9 +9,12 @@ export const loginRoute = base
 		summary: "Client login",
 		description: "Endpoint for client login",
 	})
-	.input(z.instanceof(File))
-	.handler(async ({ input }) => {
-		const data = await LoginFileSchema.safeParseAsync(input);
+	.input(ClientLoginSchema.input)
+	.output(ClientLoginSchema.output)
+	.handler(async ({ input, context }) => {
+		const data = await ClientLoginSchema.inside.safeParseAsync(input);
+
+		await context.services.client.handle(43);
 
 		if (!data.success) {
 			return {
@@ -65,7 +32,7 @@ export const loginRoute = base
 		// 	errorMessage: "Invalid email or password",
 		// };
 
-		console.log("Client login input:", data);
+		context.services.logger.info("Parsed login data:", data);
 
-		return [];
+		return "";
 	});

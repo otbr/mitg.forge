@@ -18,7 +18,6 @@ export const clientRouter = base.prefix("/client").router({
 
 			// const ab = await file.arrayBuffer();
 			// const text = new TextDecoder(encoding).decode(ab);
-			// console.log("Get client services input:", text);
 			return true;
 		}),
 });

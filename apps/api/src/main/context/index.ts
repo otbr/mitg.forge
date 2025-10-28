@@ -1,3 +1,4 @@
+import { createRequestContainer } from "@/di/container";
 import { Services } from "@/infra/services";
 
 export type CreateContextOptions = {
@@ -5,19 +6,16 @@ export type CreateContextOptions = {
 };
 
 export type CreateContext = {
-	req: ReqContext["req"];
-	res: ReqContext["res"];
 	services: Services;
 };
 
 export async function createContext({
 	context,
 }: CreateContextOptions): Promise<CreateContext> {
-	const services = new Services(context);
+	const di = createRequestContainer(context);
+	const services = new Services(di);
 
 	return {
-		req: context.req,
-		res: context.res,
 		services,
 	};
 }

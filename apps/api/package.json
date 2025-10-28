@@ -29,6 +29,8 @@
 		"dotenv-flow": "^4.1.0",
 		"envalid": "^8.1.0",
 		"hono": "^4.10.1",
+		"reflect-metadata": "^0.2.2",
+		"tsyringe": "^4.10.0",
 		"zod": "^4.1.12"
 	},
 	"devDependencies": {
