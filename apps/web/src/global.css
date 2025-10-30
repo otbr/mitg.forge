@@ -1,74 +1,74 @@
 @import "tailwindcss";
 
 @theme {
-  --font-fondamento: 'Fondamento', cursive;
-  --font-martel: 'Martel', serif;
-  --font-poppins: 'Poppins', sans-serif;
-  --font-roboto: 'Roboto', sans-serif;
+	--font-fondamento: "Fondamento", cursive;
+	--font-martel: "Martel", serif;
+	--font-poppins: "Poppins", sans-serif;
+	--font-roboto: "Roboto", sans-serif;
 
-  --font-sans: var(--font-roboto);
-  --font-serif: var(--font-martel);
+	--font-sans: var(--font-roboto);
+	--font-serif: var(--font-martel);
 }
 
 @layer base {
-  html {
-    font-family: var(--font-sans);
-    scroll-behavior: smooth;
-  }
+	html {
+		font-family: var(--font-sans);
+		scroll-behavior: smooth;
+	}
 }
 
 @layer utilities {
-  .layout-main {
-    @apply flex;
-    @apply flex-col;
-    @apply flex-wrap;
-    @apply gap-4;
-    @apply mt-[3px];
-    grid-area: content;
-  }
+	.layout-main {
+		@apply flex;
+		@apply flex-col;
+		@apply flex-wrap;
+		@apply gap-4;
+		@apply mt-[3px];
+		grid-area: content;
+	}
 
-  .layout-section {
-    @apply pb-4;
-    @apply mt-4;
-    @apply md:pb-6;
-    @apply md:mt-6;
-    @apply xl:pb-8;
-    @apply xl:mt-8;
-  }
+	.layout-section {
+		@apply pb-4;
+		@apply mt-4;
+		@apply md:pb-6;
+		@apply md:mt-6;
+		@apply xl:pb-8;
+		@apply xl:mt-8;
+	}
 
-  .layout-content-full {
-    @apply w-full;
-    @apply py-6;
-    @apply md:py-7;
-    @apply xl:py-8;
-  }
+	.layout-content-full {
+		@apply w-full;
+		@apply py-6;
+		@apply md:py-7;
+		@apply xl:py-8;
+	}
 
-  .layout-content {
-    @apply block;
-    @apply box-border;
-    @apply w-full;
-    @apply max-w-screen-2xl;
-    @apply px-4;
-    @apply md:px-6;
-    @apply xl:px-8;
-    @apply mx-auto;
-  } 
+	.layout-content {
+		@apply block;
+		@apply box-border;
+		@apply w-full;
+		@apply max-w-screen-2xl;
+		@apply px-4;
+		@apply md:px-6;
+		@apply xl:px-8;
+		@apply mx-auto;
+	}
 
-  .page-layout {
-    display: grid;
-    grid-template-columns: 1fr; 
-    grid-template-areas: 'header' 'content';
-  }
+	.page-layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-areas: "header" "content";
+	}
 
-  /* Medium screens and up */
-  @media (width > 80rem) { 
-    .page-layout {
-      column-gap: 0.5rem;
-      grid-template-columns: 205px auto 205px;
-      grid-template-areas:
-        'header header header'
-        'navigation content sidebar'
-        'footer footer footer';
-    }
-  }
+	/* Medium screens and up */
+	@media (width > 80rem) {
+		.page-layout {
+			column-gap: 0.5rem;
+			grid-template-columns: 205px auto 205px;
+			grid-template-areas:
+				"header header header"
+				"navigation content sidebar"
+				"footer footer footer";
+		}
+	}
 }
