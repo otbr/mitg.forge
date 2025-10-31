@@ -18,6 +18,15 @@
 	"[javascriptreact]": {
 		"editor.defaultFormatter": "biomejs.biome"
 	},
+	"[css]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[tailwindcss]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
 	"eslint.enable": false,
 	"prettier.enable": false,
 	"cSpell.words": [
@@ -78,6 +87,7 @@
 		"lifeleech",
 		"linux",
 		"listid",
+		"loginbox",
 		"lookaddons",
 		"lookbody",
 		"lookfamiliarstype",
@@ -120,11 +130,13 @@
 		"previewstate",
 		"pvptype",
 		"quickloot",
+		"quintenary",
 		"raceid",
 		"remainingdailytournamentplaytime",
 		"restrictedstore",
 		"returnernotification",
 		"roboto",
+		"safelist",
 		"sessionkey",
 		"showrewardnews",
 		"skulltime",

@@ -1,6 +1,6 @@
+import { Information } from "../components/Information";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
-import { Information } from "./Information";
 import { Navigation } from "./Navigation";
 import { Sidebar } from "./Sidebar";
 

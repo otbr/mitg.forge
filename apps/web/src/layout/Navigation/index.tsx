@@ -1,3 +1,6 @@
+import { BoxDownload } from "../../components/Box/Download";
+import { BoxLogin } from "../../components/Box/Login";
+
 export const Navigation = () => {
 	return (
 		<nav
@@ -6,7 +9,8 @@ export const Navigation = () => {
 				gridArea: "navigation",
 			}}
 		>
-			<span>Navigation</span>
+			<BoxLogin />
+			<BoxDownload />
 		</nav>
 	);
 };
