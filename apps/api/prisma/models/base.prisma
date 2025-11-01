@@ -91,6 +91,7 @@ model accounts {
   coins_transactions  coins_transactions[]
   players             players[]
   store_history       store_history[]
+  sessions            miforge_sessions[]
 }
 
 model boosted_boss {
