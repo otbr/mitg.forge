@@ -1,7 +1,7 @@
-import { publicProcedure } from "@/presentation/procedures/public";
+import { isNotAuthenticatedProcedure } from "@/presentation/procedures/isNotAuthenticated";
 import { AccountLoginSchema } from "./schema";
 
-export const loginRoute = publicProcedure
+export const loginRoute = isNotAuthenticatedProcedure
 	.route({
 		method: "POST",
 		path: "/login",

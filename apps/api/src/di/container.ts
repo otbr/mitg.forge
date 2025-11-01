@@ -1,6 +1,7 @@
 import { container, type DependencyContainer, Lifecycle } from "tsyringe";
 import { TOKENS } from "@/di/tokens";
-import { AccountsService, TibiaClientService } from "@/domain";
+import { AccountsService, TibiaClientService } from "@/domain/services";
+import { SessionService } from "@/domain/services/session";
 import { env } from "@/env";
 import { makePrisma, type Prisma } from "@/infra/clients";
 import { Cookies } from "@/infra/cookies";
@@ -106,6 +107,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountsService,
 		{ useClass: AccountsService },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.SessionService,
+		{ useClass: SessionService },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

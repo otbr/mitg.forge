@@ -1,10 +1,15 @@
 import { getConnInfo } from "hono/bun";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "@/di/tokens";
+import { env } from "@/env";
+import type { Cookies } from "../cookies";
 
 @injectable()
 export class Metadata {
-	constructor(@inject(TOKENS.Context) private readonly context: ReqContext) {}
+	constructor(
+		@inject(TOKENS.Context) private readonly context: ReqContext,
+		@inject(TOKENS.Cookies) private readonly cookies: Cookies,
+	) {}
 
 	public ip(): string | null {
 		const info = getConnInfo(this.context);
@@ -35,5 +40,25 @@ export class Metadata {
 
 	public requestId(): string | null {
 		return this.context.get("requestId") ?? null;
+	}
+
+	public bearer(): string | null {
+		const authHeader = this.context.req.header("authorization");
+		if (!authHeader) return null;
+
+		const [type, token] = authHeader.split(" ");
+		if (type.toLowerCase() !== "bearer") {
+			return null;
+		}
+
+		return token;
+	}
+
+	public bearerFromCookies(): string | null {
+		const token = this.cookies.get(env.SESSION_TOKEN_NAME, {
+			namePrefix: true,
+		});
+
+		return token;
 	}
 }

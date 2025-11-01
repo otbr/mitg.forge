@@ -1,5 +1,6 @@
 import type { InjectionToken } from "tsyringe";
-import type { AccountsService, TibiaClientService } from "@/domain";
+import type { AccountsService, TibiaClientService } from "@/domain/services";
+import type { SessionService } from "@/domain/services/session";
 import type { Prisma } from "@/infra/clients";
 import type { Cookies } from "@/infra/cookies";
 import type { HasherCrypto } from "@/infra/crypto/hasher";
@@ -41,4 +42,5 @@ export const TOKENS = {
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
 	AccountsService: token<AccountsService>("AccountsService"),
+	SessionService: token<SessionService>("SessionService"),
 } as const;

@@ -2,13 +2,11 @@ import { ORPCError } from "@orpc/client";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "@/di/tokens";
 import type { HasherCrypto } from "@/infra/crypto/hasher";
-import type { Logger } from "@/infra/logging/logger";
 import type { AccountRepository } from "@/repositories";
 
 @injectable()
 export class TibiaClientService {
 	constructor(
-		@inject(TOKENS.Logger) private readonly logger: Logger,
 		@inject(TOKENS.HasherCrypto)
 		private readonly hasherCrypto: HasherCrypto,
 		@inject(TOKENS.AccountRepository)

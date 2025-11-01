@@ -14,6 +14,10 @@ export const env = cleanEnv(process.env, {
 		default: "miforge-api",
 		desc: "The name of this server",
 	}),
+	SESSION_TOKEN_NAME: str({
+		default: "token",
+		desc: "The name of the session token cookie",
+	}),
 	PORT: str({
 		default: "4000",
 		desc: "The port the server will listen on",

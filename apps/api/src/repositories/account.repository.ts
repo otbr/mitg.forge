@@ -6,6 +6,18 @@ import type { Prisma } from "@/infra/clients";
 export class AccountRepository {
 	constructor(@inject(TOKENS.Prisma) private readonly prisma: Prisma) {}
 
+	async findByToken(token: string) {
+		return this.prisma.accounts.findFirst({
+			where: {
+				sessions: {
+					some: {
+						token,
+					},
+				},
+			},
+		});
+	}
+
 	async findByEmail(email: string) {
 		return this.prisma.accounts.findFirst({
 			where: {

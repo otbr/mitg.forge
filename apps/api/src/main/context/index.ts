@@ -1,5 +1,5 @@
 import { createRequestContainer } from "@/di/container";
-import { Services } from "@/infra/services";
+import { Services } from "@/domain/services";
 
 export type CreateContextOptions = {
 	context: ReqContext;
