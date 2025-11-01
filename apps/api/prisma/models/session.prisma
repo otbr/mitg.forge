@@ -1,6 +1,6 @@
 model miforge_sessions {
   id         Int      @id @default(autoincrement())
-  token      String   @unique
+  token      String   @unique @db.VarChar(512)
   expires_at DateTime
 
   ip       String?
