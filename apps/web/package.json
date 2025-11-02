@@ -5,14 +5,17 @@
 	"scripts": {
 		"dev": "vite --port 3000",
 		"build": "vite build && tsc --noEmit",
-		"check": "tsc --noEmit",
 		"serve": "vite preview",
-		"start": "vite"
+		"start": "vite",
+		"types": "tsc --noEmit",
+		"lint": "biome lint .",
+		"check": "biome check ."
 	},
 	"keywords": [],
 	"packageManager": "pnpm@10.18.3",
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.2",
+		"@miforge/api": "workspace:*",
 		"@orpc/client": "^1.10.0",
 		"@orpc/tanstack-query": "^1.10.0",
 		"@tailwindcss/vite": "^4.1.15",
