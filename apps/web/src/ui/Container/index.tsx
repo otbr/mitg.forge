@@ -39,11 +39,11 @@ export const Container = forwardRef<HTMLDivElement, Props>(
 					<span className={`${corner} -bottom-px -left-px`} />
 				</div>
 				{innerContainer ? (
-					<div className="mx-0.5 border-2 border-t-0 bg-tibia-800 p-2 text-senary">
+					<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
 						<InnerContainer className="p-1">{children}</InnerContainer>
 					</div>
 				) : (
-					<div className="mx-0.5 border-2 border-t-0 bg-tibia-800 p-2 text-senary">
+					<div className="border-3 border-t-0 bg-tibia-800 p-2 text-senary">
 						{children}
 					</div>
 				)}

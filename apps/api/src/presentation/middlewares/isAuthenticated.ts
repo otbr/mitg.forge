@@ -1,8 +1,8 @@
-import { base } from "@/main/rpc/base";
+import { base } from "@/infra/rpc/base";
 
 export const isAuthenticatedMiddleware = base.middleware(
 	async ({ context, next }) => {
-		await context.services.session.isAuthenticated();
+		await context.usecases.session.authenticated.execute();
 
 		return next({
 			context,

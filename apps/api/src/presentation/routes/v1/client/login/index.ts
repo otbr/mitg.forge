@@ -1,5 +1,5 @@
-import { base } from "@/main/rpc/base";
-import { ClientLoginSchema } from "./schema";
+import { ClientLoginContractSchema } from "@/application/usecases/tibia/login/contract";
+import { base } from "@/infra/rpc/base";
 
 export const loginRoute = base
 	.route({
@@ -9,19 +9,8 @@ export const loginRoute = base
 		summary: "Client login",
 		description: "Endpoint for client login",
 	})
-	.input(ClientLoginSchema.input)
-	.output(ClientLoginSchema.output)
+	.input(ClientLoginContractSchema.input)
+	.output(ClientLoginContractSchema.output)
 	.handler(async ({ input, context }) => {
-		const result = await ClientLoginSchema.inside.safeParseAsync(input);
-
-		if (!result.success) {
-			return {
-				errorCode: 3,
-				errorMessage: "Something went wrong",
-			};
-		}
-
-		const { data } = result;
-
-		return await context.services.tibiaClient.login(data.email, data.password);
+		return context.usecases.tibia.login.execute(input);
 	});
