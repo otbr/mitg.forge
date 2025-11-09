@@ -9,6 +9,7 @@ import type { AccountDetailsBySessionUseCase } from "@/application/usecases/acco
 import type { AccountLoginUseCase } from "@/application/usecases/account/login";
 import type { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import type { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
+import type { AccountStoreHistoryUseCase } from "@/application/usecases/account/storeHistory";
 import type { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
 import type { SessionInfoUseCase } from "@/application/usecases/session/info";
 import type { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
@@ -69,6 +70,9 @@ export const TOKENS = {
 	),
 	AccountCharactersBySessionUseCase: token<AccountCharactersBySessionUseCase>(
 		"AccountCharactersBySessionUseCase",
+	),
+	AccountStoreHistoryUseCase: token<AccountStoreHistoryUseCase>(
+		"AccountStoreHistoryUseCase",
 	),
 
 	SessionInfoUseCase: token<SessionInfoUseCase>("SessionInfoUseCase"),

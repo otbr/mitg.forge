@@ -34,7 +34,7 @@ export const AccountDetailsHistory = () => {
 						</span>
 					</div>
 					<div>
-						<ButtonLink variant="info" to="/">
+						<ButtonLink variant="info" to="/account/coins_history">
 							View History
 						</ButtonLink>
 					</div>

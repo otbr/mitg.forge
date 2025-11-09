@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/modules/clients";
 import { TOKENS } from "@/infra/di/tokens";
+import type { PaginationInput } from "@/utils/paginate";
 
 @injectable()
 export class AccountRepository {
@@ -51,14 +52,45 @@ export class AccountRepository {
 		});
 	}
 
+	async storeHistory(
+		accountId: number,
+		opts?: {
+			pagination: PaginationInput;
+		},
+	) {
+		const page = opts?.pagination.page ?? 1;
+		const size = opts?.pagination.size ?? 10;
+
+		const [storeHistory, total] = await Promise.all([
+			this.prisma.store_history.findMany({
+				where: {
+					account_id: accountId,
+				},
+				orderBy: {
+					time: "desc",
+				},
+				skip: (page - 1) * size,
+				take: size,
+			}),
+			this.prisma.store_history.count({
+				where: {
+					account_id: accountId,
+				},
+			}),
+		]);
+
+		return {
+			storeHistory,
+			total,
+		};
+	}
+
 	async details(email: string) {
 		return this.prisma.accounts.findFirst({
 			where: {
 				email,
 			},
 			include: {
-				coins_transactions: true,
-				store_history: true,
 				sessions: true,
 				players: true,
 			},

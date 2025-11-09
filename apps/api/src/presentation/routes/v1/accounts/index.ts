@@ -3,10 +3,12 @@ import { charactersRoute } from "./characters";
 import { detailsRoute } from "./details";
 import { loginRoute } from "./login";
 import { logoutRoute } from "./logout";
+import { accountsStoreRoutes } from "./store";
 
 export const accountsRouter = base.prefix("/accounts").tag("Accounts").router({
 	login: loginRoute,
 	logout: logoutRoute,
 	details: detailsRoute,
 	characters: charactersRoute,
+	store: accountsStoreRoutes,
 });

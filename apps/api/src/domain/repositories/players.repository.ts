@@ -55,7 +55,7 @@ export class PlayersRepository {
 					},
 				},
 				skip: (page - 1) * size,
-				take: opts?.size,
+				take: size,
 			}),
 			this.prisma.players.count({
 				where: {

@@ -13,6 +13,7 @@ import type {
 import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
 import { getAccountType, getAccountTypeId } from "@/utils/account/type";
+import type { PaginationInput } from "@/utils/paginate";
 import { CatchDecorator } from "../decorators/Catch";
 import type { SessionService } from "./session.service";
 
@@ -120,8 +121,6 @@ export class AccountsService {
 		return {
 			...account,
 			sessions: account.sessions,
-			characters: account.players,
-			store_history: account.store_history,
 		};
 	}
 
@@ -193,5 +192,14 @@ export class AccountsService {
 			}),
 			total: total,
 		};
+	}
+
+	@CatchDecorator()
+	async storeHistory({ pagination }: { pagination: PaginationInput }) {
+		const session = this.metadata.session();
+
+		return this.accountRepository.storeHistory(session.id, {
+			pagination,
+		});
 	}
 }

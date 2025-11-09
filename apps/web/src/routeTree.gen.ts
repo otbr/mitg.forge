@@ -22,6 +22,9 @@ const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
 const AuthAccountDetailsIndexLazyRouteImport = createFileRoute(
   '/_auth/account/details/',
 )()
+const AuthAccountCoins_historyIndexLazyRouteImport = createFileRoute(
+  '/_auth/account/coins_history/',
+)()
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -69,12 +72,23 @@ const AuthAccountDetailsIndexLazyRoute =
   } as any).lazy(() =>
     import('./routes/_auth/account/details/index.lazy').then((d) => d.Route),
   )
+const AuthAccountCoins_historyIndexLazyRoute =
+  AuthAccountCoins_historyIndexLazyRouteImport.update({
+    id: '/account/coins_history/',
+    path: '/account/coins_history/',
+    getParentRoute: () => AuthRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_auth/account/coins_history/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/account': typeof AuthAccountIndexRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
+  '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +96,7 @@ export interface FileRoutesByTo {
   '/account': typeof AuthAccountIndexRoute
   '/login': typeof Not_authLoginIndexLazyRoute
   '/terms': typeof PublicTermsIndexLazyRoute
+  '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
 }
 export interface FileRoutesById {
@@ -93,13 +108,26 @@ export interface FileRoutesById {
   '/_auth/account/': typeof AuthAccountIndexRoute
   '/_not_auth/login/': typeof Not_authLoginIndexLazyRoute
   '/_public/terms/': typeof PublicTermsIndexLazyRoute
+  '/_auth/account/coins_history/': typeof AuthAccountCoins_historyIndexLazyRoute
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/login' | '/terms' | '/account/details'
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/login'
+    | '/terms'
+    | '/account/coins_history'
+    | '/account/details'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/account' | '/login' | '/terms' | '/account/details'
+  to:
+    | '/'
+    | '/account'
+    | '/login'
+    | '/terms'
+    | '/account/coins_history'
+    | '/account/details'
   id:
     | '__root__'
     | '/_auth'
@@ -109,6 +137,7 @@ export interface FileRouteTypes {
     | '/_auth/account/'
     | '/_not_auth/login/'
     | '/_public/terms/'
+    | '/_auth/account/coins_history/'
     | '/_auth/account/details/'
   fileRoutesById: FileRoutesById
 }
@@ -176,16 +205,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAccountDetailsIndexLazyRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/account/coins_history/': {
+      id: '/_auth/account/coins_history/'
+      path: '/account/coins_history'
+      fullPath: '/account/coins_history'
+      preLoaderRoute: typeof AuthAccountCoins_historyIndexLazyRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
   }
 }
 
 interface AuthRouteRouteChildren {
   AuthAccountIndexRoute: typeof AuthAccountIndexRoute
+  AuthAccountCoins_historyIndexLazyRoute: typeof AuthAccountCoins_historyIndexLazyRoute
   AuthAccountDetailsIndexLazyRoute: typeof AuthAccountDetailsIndexLazyRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAccountIndexRoute: AuthAccountIndexRoute,
+  AuthAccountCoins_historyIndexLazyRoute:
+    AuthAccountCoins_historyIndexLazyRoute,
   AuthAccountDetailsIndexLazyRoute: AuthAccountDetailsIndexLazyRoute,
 }
 

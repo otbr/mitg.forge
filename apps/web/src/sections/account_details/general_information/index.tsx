@@ -47,28 +47,29 @@ export const AccountDetailGeneralInformation = () => {
 						<div className="flex flex-row flex-wrap items-center gap-2">
 							<div className="flex flex-row items-center gap-0.5">
 								<span className="font-verdana text-secondary text-sm">
-									{data.coins_transferable}
+									{data.coins}
 								</span>
-								<Tooltip content="Transferable coins">
+								<Tooltip content="Non-transferable coins">
 									<img
 										alt="tibia coins"
 										src="/assets/icons/global/icon-tibiacoin.png"
+										className="h-3 w-3"
 										width={12}
 										height={12}
 									/>
 								</Tooltip>
 							</div>
 							<div className="flex flex-row items-center gap-0.5 font-verdana text-secondary text-sm">
-								(Including: {data.coins}{" "}
-								<Tooltip content="Non-transferable coins">
+								({data.coins_transferable})
+								<Tooltip content="Transferable coins">
 									<img
 										alt="tibia coins"
+										className="h-3 w-3 min-w-3"
 										src="/assets/icons/global/icon-tibiacointrusted.png"
 										width={12}
 										height={12}
 									/>
 								</Tooltip>
-								)
 							</div>
 							<Tooltip content="Transferable coins can be used in the Tibia Store and traded with other players.">
 								<img alt="coins info" src="/assets/icons/global/info.gif" />
@@ -79,7 +80,7 @@ export const AccountDetailGeneralInformation = () => {
 						<div className="flex flex-row flex-wrap items-center gap-2">
 							<div className="flex flex-row items-center gap-0.5">
 								<span className="font-verdana text-secondary text-sm">
-									{data.coins_transferable}
+									{data.tournament_coins}
 								</span>
 								<Tooltip content="Tournament coins">
 									<img

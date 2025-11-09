@@ -9,6 +9,7 @@ import { AccountDetailsBySessionUseCase } from "@/application/usecases/account/d
 import { AccountLoginUseCase } from "@/application/usecases/account/login";
 import { AccountLogoutUseCase } from "@/application/usecases/account/logout";
 import { AccountPermissionedUseCase } from "@/application/usecases/account/permissioned";
+import { AccountStoreHistoryUseCase } from "@/application/usecases/account/storeHistory";
 import { SessionAuthenticatedUseCase } from "@/application/usecases/session/authenticated";
 import { SessionInfoUseCase } from "@/application/usecases/session/info";
 import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
@@ -157,6 +158,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.AccountCharactersBySessionUseCase,
 		{ useClass: AccountCharactersBySessionUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.AccountStoreHistoryUseCase,
+		{ useClass: AccountStoreHistoryUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 
