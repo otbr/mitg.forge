@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "pnpm"
 
       - name: Enable Corepack (pnpm)
         run: corepack enable
@@ -34,6 +35,12 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+
+      - name: Print tool versions (sanity)
+        run: |
+          pnpm --filter @miforge/api exec tsc -v
+          pnpm why typescript
+          pnpm why react react-dom
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
