@@ -21,7 +21,7 @@ if (import.meta.main) {
 		fetch: app.fetch,
 		port: env.PORT,
 	});
-	logger.info(`Server running on port ${env.PORT}`);
+	logger.info(`[Server]: running on port ${env.PORT}`);
 
 	const shutdown = async (signal: string) => {
 		logger.info(`Received ${signal}, shutting down server...`);

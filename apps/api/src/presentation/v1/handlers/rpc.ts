@@ -1,6 +1,6 @@
 import { onError } from "@orpc/client";
 import { RPCHandler } from "@orpc/server/fetch";
-import { router } from "@/presentation/routes/v1";
+import { router } from "@/presentation/v1/routes";
 
 export const rpcApiHandler = new RPCHandler(router, {
 	plugins: [],

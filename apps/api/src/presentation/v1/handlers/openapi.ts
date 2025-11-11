@@ -3,7 +3,7 @@ import { OpenAPIGenerator } from "@orpc/openapi";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import { router } from "@/presentation/routes/v1";
+import { router } from "@/presentation/v1/routes";
 
 export const openApiHandler = new OpenAPIHandler(router, {
 	plugins: [

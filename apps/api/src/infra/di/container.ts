@@ -14,8 +14,13 @@ import { SessionAuthenticatedUseCase } from "@/application/usecases/session/auth
 import { SessionInfoUseCase } from "@/application/usecases/session/info";
 import { SessionNotAuthenticatedUseCase } from "@/application/usecases/session/notAuthenticated";
 import { TibiaLoginUseCase } from "@/application/usecases/tibia/login";
-import { makePrisma, type Prisma } from "@/domain/modules/clients";
-import { Mailer } from "@/domain/modules/clients/mailer";
+import {
+	Mailer,
+	makePrisma,
+	makeRedis,
+	type Prisma,
+	type Redis,
+} from "@/domain/modules/clients";
 import { Cookies } from "@/domain/modules/cookies";
 import { HasherCrypto } from "@/domain/modules/crypto/hasher";
 import { JwtCrypto } from "@/domain/modules/crypto/jwt";
@@ -25,6 +30,7 @@ import { Metadata } from "@/domain/modules/metadata";
 import { Pagination } from "@/domain/modules/pagination";
 import {
 	AccountRepository,
+	MailerRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
@@ -32,6 +38,7 @@ import { env } from "@/infra/env";
 import { TOKENS } from "./tokens";
 
 declare global {
+	var __REDIS__: Redis | undefined;
 	var __PRISMA__: Prisma | undefined;
 	var __BOOTSTRAPPED__: boolean | undefined;
 }
@@ -48,11 +55,19 @@ export function bootstrapContainer() {
 
 	const prisma: Prisma = global.__PRISMA__ ?? makePrisma(rootLogger);
 	if (env.isDev) {
+		rootLogger.info("[Prisma]: Using shared Prisma instance for development");
 		global.__PRISMA__ = prisma;
+	}
+
+	const redis: Redis = global.__REDIS__ ?? makeRedis(rootLogger);
+	if (env.isDev) {
+		rootLogger.info("[Redis]: Using shared Redis instance for development");
+		global.__REDIS__ = redis;
 	}
 
 	container.registerInstance(TOKENS.RootLogger, rootLogger);
 	container.registerInstance(TOKENS.Prisma, prisma);
+	container.registerInstance(TOKENS.Redis, redis);
 
 	// Mailer
 	container.register(
@@ -122,6 +137,11 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionRepository,
 		{ useClass: SessionRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	childContainer.register(
+		TOKENS.MailerRepository,
+		{ useClass: MailerRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

@@ -40,6 +40,9 @@ export const env = cleanEnv(process.env, {
 	DATABASE_NAME: str({
 		desc: "Database name",
 	}),
+	REDIS_URL: str({
+		desc: "The Redis connection URL",
+	}),
 	MAILER_ENABLED: bool({
 		default: false,
 		desc: "Whether the mailer is enabled",
