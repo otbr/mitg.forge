@@ -30,11 +30,12 @@ import { Metadata } from "@/domain/modules/metadata";
 import { Pagination } from "@/domain/modules/pagination";
 import {
 	AccountRepository,
-	MailerRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
 import { env } from "@/infra/env";
+import { EmailQueue } from "@/jobs/queue/email.queue";
+import { EmailWorker } from "@/jobs/workers/email.worker";
 import { TOKENS } from "./tokens";
 
 declare global {
@@ -66,13 +67,29 @@ export function bootstrapContainer() {
 	}
 
 	container.registerInstance(TOKENS.RootLogger, rootLogger);
+	container.registerInstance(TOKENS.Logger, rootLogger);
 	container.registerInstance(TOKENS.Prisma, prisma);
 	container.registerInstance(TOKENS.Redis, redis);
+	container.registerInstance(TOKENS.BullConnection, redis);
 
 	// Mailer
 	container.register(
 		TOKENS.Mailer,
 		{ useClass: Mailer },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+
+	// Queues
+	container.register(
+		TOKENS.EmailQueue,
+		{ useClass: EmailQueue },
+		{ lifecycle: Lifecycle.Singleton },
+	);
+
+	// Workers
+	container.register(
+		TOKENS.EmailWorker,
+		{ useClass: EmailWorker },
 		{ lifecycle: Lifecycle.Singleton },
 	);
 
@@ -137,11 +154,6 @@ export function createRequestContainer(
 	childContainer.register(
 		TOKENS.SessionRepository,
 		{ useClass: SessionRepository },
-		{ lifecycle: Lifecycle.ResolutionScoped },
-	);
-	childContainer.register(
-		TOKENS.MailerRepository,
-		{ useClass: MailerRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

@@ -23,10 +23,11 @@ import type { Metadata } from "@/domain/modules/metadata";
 import type { Pagination } from "@/domain/modules/pagination";
 import type {
 	AccountRepository,
-	MailerRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
+import type { EmailQueue } from "@/jobs/queue/email.queue";
+import type { EmailWorker } from "@/jobs/workers/email.worker";
 
 export const token = <T>(desc: string) => Symbol(desc) as InjectionToken<T>;
 
@@ -42,6 +43,13 @@ export const TOKENS = {
 	Prisma: token<Prisma>("Prisma"),
 	Mailer: token<Mailer>("Mailer"),
 	Redis: token<Redis>("Redis"),
+	BullConnection: token<Redis>("BullConnection"),
+
+	// Queues
+	EmailQueue: token<EmailQueue>("EmailQueue"),
+
+	// Workers
+	EmailWorker: token<EmailWorker>("EmailWorker"),
 
 	// Utils
 	Metadata: token<Metadata>("Metadata"),
@@ -56,7 +64,6 @@ export const TOKENS = {
 	AccountRepository: token<AccountRepository>("AccountRepository"),
 	PlayersRepository: token<PlayersRepository>("PlayersRepository"),
 	SessionRepository: token<SessionRepository>("SessionRepository"),
-	MailerRepository: token<MailerRepository>("MailerRepository"),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),

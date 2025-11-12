@@ -38,6 +38,7 @@
 		"autoincrement",
 		"boostname",
 		"bosstiary",
+		"bullmq",
 		"clienttype",
 		"clientversion",
 		"commitlint",
