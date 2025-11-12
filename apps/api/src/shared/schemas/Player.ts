@@ -82,6 +82,7 @@ export const PlayerSchema = z.object({
 	skill_lifeleech_amount: z.bigint(),
 	skill_manaleech_chance: z.bigint(),
 	skill_manaleech_amount: z.bigint(),
+	weapon_proficiencies: z.instanceof(Uint8Array).or(z.null()),
 	manashield: z.number(),
 	max_manashield: z.number(),
 	xpboost_stamina: z.number().nullable(), // is in seconds
