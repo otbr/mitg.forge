@@ -1,5 +1,7 @@
+export * from "./cancelDeleteCharacter";
 export * from "./characters";
 export * from "./createCharacter";
+export * from "./deleteCharacter";
 export * from "./details";
 export * from "./editCharacter";
 export * from "./findCharacter";

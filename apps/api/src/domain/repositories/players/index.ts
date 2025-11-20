@@ -2,6 +2,7 @@ import type { player_items, players } from "generated/client";
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
+import { dateToUnixTimestamp } from "@/shared/utils/date";
 
 @injectable()
 export class PlayersRepository {
@@ -13,6 +14,18 @@ export class PlayersRepository {
 				name,
 			},
 			data,
+		});
+	}
+
+	async scheduleToDeleteByName(name: string, deleteAt?: Date) {
+		return this.prisma.players.update({
+			where: {
+				name,
+			},
+			data: {
+				// When deleteAt is undefined, set deletion to 0 (no deletion)
+				deletion: deleteAt ? dateToUnixTimestamp(deleteAt) : 0,
+			},
 		});
 	}
 

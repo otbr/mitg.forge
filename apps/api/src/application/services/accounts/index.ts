@@ -503,4 +503,53 @@ export class AccountsService {
 			proficiencies: proficiencies,
 		};
 	}
+
+	@Catch()
+	async cancelCharacterDeletionByName(name: string) {
+		const session = this.metadata.session();
+
+		const character = await this.accountRepository.findCharacterByName(
+			name,
+			session.id,
+		);
+
+		if (!character) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Character not found",
+			});
+		}
+
+		await this.playersRepository.scheduleToDeleteByName(
+			character.name,
+			undefined,
+		);
+	}
+
+	@Catch()
+	async scheduleCharacterDeletionByName(name: string) {
+		const session = this.metadata.session();
+
+		const character = await this.accountRepository.findCharacterByName(
+			name,
+			session.id,
+		);
+
+		if (!character) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Character not found",
+			});
+		}
+
+		const deletionDate = new Date();
+		/**
+		 * TODO: Make the deletion period configurable. In database with miforge_config
+		 * or miforge_settings
+		 */
+		deletionDate.setDate(deletionDate.getDate() + 30);
+
+		await this.playersRepository.scheduleToDeleteByName(
+			character.name,
+			deletionDate,
+		);
+	}
 }

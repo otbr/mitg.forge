@@ -7,8 +7,10 @@ import type {
 	WorldsService,
 } from "@/application/services";
 import type {
+	AccountCancelDeleteCharacterUseCase,
 	AccountCharactersBySessionUseCase,
 	AccountCreateCharacterUseCase,
+	AccountDeleteCharacterUseCase,
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
@@ -127,6 +129,13 @@ export const TOKENS = {
 	AccountEditCharacterUseCase: token<AccountEditCharacterUseCase>(
 		"AccountEditCharacterUseCase",
 	),
+	AccountDeleteCharacterUseCase: token<AccountDeleteCharacterUseCase>(
+		"AccountDeleteCharacterUseCase",
+	),
+	AccountCancelDeleteCharacterUseCase:
+		token<AccountCancelDeleteCharacterUseCase>(
+			"AccountCancelDeleteCharacterUseCase",
+		),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
 

@@ -5,7 +5,7 @@ export const findByNameCharacterRoute = isAuthenticatedProcedure
 	.route({
 		method: "GET",
 		path: "/character/{name}",
-		summary: "Find character by name",
+		summary: "Find character",
 		successStatus: 200,
 		description:
 			"Retrieve a character by name associated with the authenticated user's account.",
