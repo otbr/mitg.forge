@@ -5,7 +5,7 @@ export const editByNameCharacterRoute = isAuthenticatedProcedure
 	.route({
 		method: "PATCH",
 		path: "/character/{name}",
-		summary: "Edit character by name",
+		summary: "Edit character",
 		successStatus: 204,
 		description:
 			"Edit a character by name associated with the authenticated user's account.",

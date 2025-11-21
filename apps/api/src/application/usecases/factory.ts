@@ -46,6 +46,12 @@ export class UseCasesFactory {
 			TOKENS.AccountFindCharacterUseCase,
 		);
 		const editCharacter = this.di.resolve(TOKENS.AccountEditCharacterUseCase);
+		const deleteCharacter = this.di.resolve(
+			TOKENS.AccountDeleteCharacterUseCase,
+		);
+		const cancelDeleteCharacter = this.di.resolve(
+			TOKENS.AccountCancelDeleteCharacterUseCase,
+		);
 
 		return {
 			login,
@@ -58,6 +64,8 @@ export class UseCasesFactory {
 			createCharacter,
 			findCharacterByName,
 			editCharacter,
+			deleteCharacter,
+			cancelDeleteCharacter,
 		} as const;
 	}
 

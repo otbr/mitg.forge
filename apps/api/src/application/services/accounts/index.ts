@@ -503,4 +503,85 @@ export class AccountsService {
 			proficiencies: proficiencies,
 		};
 	}
+
+	@Catch()
+	async cancelCharacterDeletionByName(name: string) {
+		const session = this.metadata.session();
+
+		const character = await this.accountRepository.findCharacterByName(
+			name,
+			session.id,
+		);
+
+		if (!character) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Character not found",
+			});
+		}
+
+		/**
+		 * Don't send deleteAt in this case to set deletion to 0 (no deletion)
+		 * and cancel any scheduled deletion.
+		 */
+		await this.playersRepository.scheduleToDeleteByName(character.name);
+	}
+
+	@Catch()
+	async scheduleCharacterDeletionByName(name: string, password: string) {
+		const session = this.metadata.session();
+
+		const account = await this.accountRepository.findByEmail(session.email);
+
+		if (!account) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Account not found",
+			});
+		}
+
+		const isPasswordValid = this.hasherCrypto.compare(
+			password,
+			account.password,
+		);
+
+		if (!isPasswordValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
+			});
+		}
+
+		const character = await this.accountRepository.findCharacterByName(
+			name,
+			session.id,
+		);
+
+		if (!character) {
+			throw new ORPCError("NOT_FOUND", {
+				message: "Character not found",
+			});
+		}
+
+		const alreadyScheduled = character.deletion > BigInt(0);
+
+		if (alreadyScheduled) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "Character deletion is already scheduled",
+			});
+		}
+
+		const deletionDate = new Date();
+		/**
+		 * TODO: Make the deletion period configurable. In database with miforge_config
+		 * or miforge_settings
+		 */
+		deletionDate.setDate(deletionDate.getDate() + 30);
+
+		await this.playersRepository.scheduleToDeleteByName(
+			character.name,
+			deletionDate,
+		);
+
+		return {
+			scheduleDate: deletionDate,
+		};
+	}
 }
