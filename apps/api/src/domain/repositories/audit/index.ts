@@ -50,32 +50,24 @@ export class AuditRepository {
 			details?: string;
 		},
 	): Promise<void> {
-		try {
-			const session = this.metadata.session();
-			const requestId = this.metadata.requestId();
-			const ip = this.metadata.ip();
-			const agent = this.metadata.userAgent();
+		const session = this.metadata.sessionOrNull();
+		const requestId = this.metadata.requestId();
+		const ip = this.metadata.ip();
+		const agent = this.metadata.userAgent();
 
-			await this.database.miforge_account_audit.create({
-				data: {
-					accountId: session.id,
-					action,
-					ip,
-					requestId,
-					userAgent: agent,
-					metadata: data?.metadata ? safeStringify(data.metadata) : undefined,
-					success: data?.success,
-					errorCode: data?.errorCode,
-					details: data?.details,
-				},
-			});
-		} catch (error) {
-			console.log(error);
-			this.logger.warn("Failed to create audit log entry", {
-				error: (error as Error).message,
-			});
-			return;
-		}
+		await this.database.miforge_account_audit.create({
+			data: {
+				accountId: session?.id,
+				action,
+				ip,
+				requestId,
+				userAgent: agent,
+				metadata: data?.metadata ? safeStringify(data.metadata) : undefined,
+				success: data?.success,
+				errorCode: data?.errorCode,
+				details: data?.details,
+			},
+		});
 	}
 }
 
@@ -84,4 +76,5 @@ const AuditAction = {
 	UNDELETE_CHARACTER: "UNDELETE_CHARACTER",
 	UPDATED_CHARACTER: "UPDATED_CHARACTER",
 	CREATED_CHARACTER: "CREATED_CHARACTER",
+	CREATED_ACCOUNT: "CREATED_ACCOUNT",
 } as const;

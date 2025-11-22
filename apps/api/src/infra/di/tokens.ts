@@ -11,6 +11,7 @@ import type {
 	AccountCancelDeleteCharacterUseCase,
 	AccountCharactersBySessionUseCase,
 	AccountCreateCharacterUseCase,
+	AccountCreateUseCase,
 	AccountDeleteCharacterUseCase,
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
@@ -142,6 +143,7 @@ export const TOKENS = {
 			"AccountCancelDeleteCharacterUseCase",
 		),
 	AccountAuditUseCase: token<AuditAccountUseCase>("AuditAccountUseCase"),
+	AccountCreateUseCase: token<AccountCreateUseCase>("AccountCreateUseCase"),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
 

@@ -3,6 +3,7 @@ import {
 	AccountCancelDeleteCharacterUseCase,
 	AccountCharactersBySessionUseCase,
 	AccountCreateCharacterUseCase,
+	AccountCreateUseCase,
 	AccountDeleteCharacterUseCase,
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
@@ -80,6 +81,11 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountAuditUseCase,
 		{ useClass: AuditAccountUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountCreateUseCase,
+		{ useClass: AccountCreateUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

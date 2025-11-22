@@ -1,10 +1,11 @@
 import { render as renderToHtml } from "@react-email/render";
-import { createElement } from "react";
+import { type Attributes, createElement, type FunctionComponent } from "react";
 
-export type TemplateName = "RecoveryKey";
+export type TemplateName = "RecoveryKey" | "AccountCreated";
 
 const templates = {
 	RecoveryKey: () => import("./templates/RecoveryKey"),
+	AccountCreated: () => import("./templates/AccountCreated"),
 	// biome-ignore lint/suspicious/noExplicitAny: <no way to avoid using any here>
 } satisfies Record<TemplateName, () => Promise<any>>;
 
@@ -22,7 +23,9 @@ export async function renderTemplate<T extends TemplateName>(
 	props: PropsOf<T>,
 ): Promise<string> {
 	const Cmp = await templates[name]();
-	const element = createElement(Cmp.default, props);
+	const Component = Cmp.default as FunctionComponent<PropsOf<T>>;
+
+	const element = createElement(Component, props as PropsOf<T> & Attributes);
 
 	const html = await renderToHtml(element);
 

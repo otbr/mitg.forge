@@ -12,8 +12,8 @@ model miforge_account_audit {
   requestId String? @db.VarChar(255) // ID of the request associated with the action
   metadata  Json? // Additional metadata related to the action
 
-  accountId Int      @map("account_id") @db.UnsignedInt
-  account   accounts @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId Int?      @map("account_id") @db.UnsignedInt
+  account   accounts? @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

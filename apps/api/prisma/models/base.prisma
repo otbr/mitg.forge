@@ -71,9 +71,9 @@ model account_viplist {
 
 model accounts {
   id                  Int                   @id @default(autoincrement()) @db.UnsignedInt
-  name                String                @unique(map: "accounts_unique") @db.VarChar(32)
+  name                String?               @db.VarChar(32)
   password            String                @db.Text
-  email               String                @default("") @db.VarChar(255)
+  email               String                @unique(map: "accounts_email_unique") @db.VarChar(255)
   premdays            Int                   @default(0)
   premdays_purchased  Int                   @default(0)
   lastday             Int                   @default(0) @db.UnsignedInt
@@ -98,6 +98,9 @@ model accounts {
   sessions      miforge_account_sessions[]
   registrations miforge_account_registration?
   audits        miforge_account_audit[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 }
 
 model boosted_boss {

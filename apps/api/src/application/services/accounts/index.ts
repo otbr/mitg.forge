@@ -59,6 +59,39 @@ export class AccountsService {
 	) {}
 
 	@Catch()
+	async create(data: { name?: string; password: string; email: string }) {
+		const existingAccount = await this.accountRepository.findByEmail(
+			data.email,
+		);
+
+		if (existingAccount) {
+			throw new ORPCError("CONFLICT", {
+				message: "An account with this email already exists",
+			});
+		}
+
+		const hashedPassword = this.hasherCrypto.hash(data.password);
+
+		const newAccount = await this.accountRepository.create({
+			name: data.name,
+			password: hashedPassword,
+			email: data.email,
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			to: newAccount.email,
+			props: {
+				email: newAccount.email,
+			},
+			subject: "Welcome to Miforge!",
+			template: "AccountCreated",
+		});
+
+		return newAccount;
+	}
+
+	@Catch()
 	async login({ email, password }: { email: string; password: string }) {
 		/**
 		 * TODO - Implement check for banned accounts to prevent login,
@@ -68,8 +101,8 @@ export class AccountsService {
 
 		if (!account) {
 			this.logger.warn(`Login failed for email: ${email} - account not found.`);
-			throw new ORPCError("NOT_FOUND", {
-				message: "Account not found",
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid credentials",
 			});
 		}
 
@@ -386,7 +419,7 @@ export class AccountsService {
 				to: account.email,
 				props: {
 					code: recoveryKey,
-					user: account.name,
+					user: account.name ?? "User",
 				},
 				subject: "Your Account Recovery Key",
 				template: "RecoveryKey",

@@ -30,7 +30,10 @@ export const BoxLogin = () => {
 							<ButtonImageLink to="/login" preload={false}>
 								Login
 							</ButtonImageLink>
-							<Link to="/" className="fondamento-title text-xs hover:underline">
+							<Link
+								to="/account/create"
+								className="fondamento-title text-xs hover:underline"
+							>
 								Create Account
 							</Link>
 						</>

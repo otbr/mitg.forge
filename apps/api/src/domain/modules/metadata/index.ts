@@ -63,6 +63,16 @@ export class Metadata {
 		return token;
 	}
 
+	public sessionOrNull(): AuthenticatedSession | null {
+		const session = this.context.get("session");
+
+		if (!session) {
+			return null;
+		}
+
+		return session;
+	}
+
 	public session(): AuthenticatedSession {
 		const session = this.context.get("session");
 

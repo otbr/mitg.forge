@@ -17,6 +17,7 @@ export class UseCasesFactory {
 	constructor(private readonly di: DependencyContainer) {}
 
 	get account() {
+		const create = this.di.resolve(TOKENS.AccountCreateUseCase);
 		const login = this.di.resolve<AccountLoginUseCase>(
 			TOKENS.AccountLoginUseCase,
 		);
@@ -55,6 +56,7 @@ export class UseCasesFactory {
 		const auditHistory = this.di.resolve(TOKENS.AccountAuditUseCase);
 
 		return {
+			create,
 			login,
 			logout,
 			permissioned,

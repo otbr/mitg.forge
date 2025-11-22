@@ -3,7 +3,7 @@ import { unixTimestampToDate } from "@/shared/utils/date";
 
 export const AccountSchema = z.object({
 	id: z.number(),
-	name: z.string(),
+	name: z.string().nullable(),
 	password: z.string(),
 	email: z.email(),
 	premdays: z.number(),

@@ -23,6 +23,9 @@ import { Route as AuthAccountPlayerNameDeleteIndexRouteImport } from './routes/_
 
 const PublicTermsIndexLazyRouteImport = createFileRoute('/_public/terms/')()
 const Not_authLoginIndexLazyRouteImport = createFileRoute('/_not_auth/login/')()
+const Not_authAccountCreateIndexLazyRouteImport = createFileRoute(
+  '/_not_auth/account/create/',
+)()
 const AuthAccountRegistrationIndexLazyRouteImport = createFileRoute(
   '/_auth/account/registration/',
 )()
@@ -74,6 +77,14 @@ const AuthAccountIndexRoute = AuthAccountIndexRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_auth/account/index.lazy').then((d) => d.Route),
 )
+const Not_authAccountCreateIndexLazyRoute =
+  Not_authAccountCreateIndexLazyRouteImport.update({
+    id: '/account/create/',
+    path: '/account/create/',
+    getParentRoute: () => Not_authRouteRoute,
+  } as any).lazy(() =>
+    import('./routes/_not_auth/account/create/index.lazy').then((d) => d.Route),
+  )
 const AuthAccountRegistrationIndexLazyRoute =
   AuthAccountRegistrationIndexLazyRouteImport.update({
     id: '/account/registration/',
@@ -162,6 +173,7 @@ export interface FileRoutesByFullPath {
   '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
+  '/account/create': typeof Not_authAccountCreateIndexLazyRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
@@ -176,6 +188,7 @@ export interface FileRoutesByTo {
   '/account/coins_history': typeof AuthAccountCoins_historyIndexLazyRoute
   '/account/details': typeof AuthAccountDetailsIndexLazyRoute
   '/account/registration': typeof AuthAccountRegistrationIndexLazyRoute
+  '/account/create': typeof Not_authAccountCreateIndexLazyRoute
   '/account/player/create': typeof AuthAccountPlayerCreateIndexRoute
   '/account/player/$name/delete': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/account/player/$name/edit': typeof AuthAccountPlayerNameEditIndexRoute
@@ -194,6 +207,7 @@ export interface FileRoutesById {
   '/_auth/account/coins_history/': typeof AuthAccountCoins_historyIndexLazyRoute
   '/_auth/account/details/': typeof AuthAccountDetailsIndexLazyRoute
   '/_auth/account/registration/': typeof AuthAccountRegistrationIndexLazyRoute
+  '/_not_auth/account/create/': typeof Not_authAccountCreateIndexLazyRoute
   '/_auth/account/player/create/': typeof AuthAccountPlayerCreateIndexRoute
   '/_auth/account/player/$name/delete/': typeof AuthAccountPlayerNameDeleteIndexRoute
   '/_auth/account/player/$name/edit/': typeof AuthAccountPlayerNameEditIndexRoute
@@ -210,6 +224,7 @@ export interface FileRouteTypes {
     | '/account/coins_history'
     | '/account/details'
     | '/account/registration'
+    | '/account/create'
     | '/account/player/create'
     | '/account/player/$name/delete'
     | '/account/player/$name/edit'
@@ -224,6 +239,7 @@ export interface FileRouteTypes {
     | '/account/coins_history'
     | '/account/details'
     | '/account/registration'
+    | '/account/create'
     | '/account/player/create'
     | '/account/player/$name/delete'
     | '/account/player/$name/edit'
@@ -241,6 +257,7 @@ export interface FileRouteTypes {
     | '/_auth/account/coins_history/'
     | '/_auth/account/details/'
     | '/_auth/account/registration/'
+    | '/_not_auth/account/create/'
     | '/_auth/account/player/create/'
     | '/_auth/account/player/$name/delete/'
     | '/_auth/account/player/$name/edit/'
@@ -303,6 +320,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account'
       preLoaderRoute: typeof AuthAccountIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_not_auth/account/create/': {
+      id: '/_not_auth/account/create/'
+      path: '/account/create'
+      fullPath: '/account/create'
+      preLoaderRoute: typeof Not_authAccountCreateIndexLazyRouteImport
+      parentRoute: typeof Not_authRouteRoute
     }
     '/_auth/account/registration/': {
       id: '/_auth/account/registration/'
@@ -396,10 +420,12 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface Not_authRouteRouteChildren {
   Not_authLoginIndexLazyRoute: typeof Not_authLoginIndexLazyRoute
+  Not_authAccountCreateIndexLazyRoute: typeof Not_authAccountCreateIndexLazyRoute
 }
 
 const Not_authRouteRouteChildren: Not_authRouteRouteChildren = {
   Not_authLoginIndexLazyRoute: Not_authLoginIndexLazyRoute,
+  Not_authAccountCreateIndexLazyRoute: Not_authAccountCreateIndexLazyRoute,
 }
 
 const Not_authRouteRouteWithChildren = Not_authRouteRoute._addFileChildren(

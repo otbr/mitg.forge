@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ORPCError } from "@orpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 import { api } from "@/sdk/lib/api/factory";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
@@ -46,20 +48,24 @@ export const LoginSection = () => {
 
 	const handleSubmit = useCallback(
 		async (data: FormValues) => {
-			await mutateAsync({
-				email: data.email,
-				password: data.password,
-			}).catch((error) => {
-				console.error("Login failed:", error);
-				return;
-			});
-
-			router.invalidate().finally(() => {
-				navigate({
-					to: "/account",
-					reloadDocument: true,
+			try {
+				await mutateAsync({
+					email: data.email,
+					password: data.password,
 				});
-			});
+				router.invalidate().finally(() => {
+					navigate({
+						to: "/account",
+						reloadDocument: true,
+					});
+				});
+			} catch (error) {
+				if (error instanceof ORPCError) {
+					return toast.error(error.message);
+				}
+
+				toast.error("An unexpected error occurred. Please try again.");
+			}
 		},
 		[mutateAsync, navigate, router],
 	);
