@@ -1,5 +1,6 @@
 enum MiforgeAccountConfirmationType {
   EMAIL_VERIFICATION
+  PASSWORD_RESET
 }
 
 enum MiforgeAccountConfirmationChannel {
