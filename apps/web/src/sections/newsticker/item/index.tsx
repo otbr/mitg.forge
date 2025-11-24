@@ -32,7 +32,7 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 	};
 
 	return (
-		<article
+		<button
 			className={cn(
 				"cursor-pointer select-none p-0.5 font-roboto text-secondary text-xs",
 				{
@@ -41,6 +41,7 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 				},
 			)}
 			onClick={handleToggle}
+			type="button"
 		>
 			{/* HEADER */}
 			<div className="flex flex-row items-start gap-1">
@@ -54,29 +55,34 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 				)}
 
 				{/* PREVIEW MOBILE */}
-				<span
-					className={cn("flex-1 overflow-hidden transition-all md:hidden", {
-						"line-clamp-1 h-4": !open,
-						hidden: open,
-					})}
+				<button
+					className={cn(
+						"flex-1 cursor-pointer overflow-hidden text-start transition-all md:hidden",
+						{
+							"line-clamp-1 h-4": !open,
+							hidden: open,
+						},
+					)}
 					onClick={handleContentClick}
+					type="button"
 				>
 					{children}
-				</span>
+				</button>
 
 				{/* DESKTOP INLINE */}
-				<span
+				<button
 					className={cn(
-						"hidden flex-1 overflow-hidden transition-all md:block",
+						"hidden flex-1 cursor-pointer overflow-hidden text-start transition-all md:block",
 						{
 							"md:line-clamp-6": open,
 							"md:line-clamp-1 md:h-4": !open,
 						},
 					)}
 					onClick={handleContentClick}
+					type="button"
 				>
 					{children}
-				</span>
+				</button>
 
 				<img
 					src={open ? "/assets/buttons/minus.gif" : "/assets/buttons/plus.gif"}
@@ -87,13 +93,16 @@ export const NewstickerItem = ({ icon, children, title, inverted }: Props) => {
 
 			{/* MOBILE: BLOCO DEBAIXO QUANDO ABRE */}
 			<div
-				className={cn("mt-1 overflow-hidden transition-all md:hidden", {
-					"max-h-0 opacity-0": !open,
-					"max-h-96 opacity-100": open,
-				})}
+				className={cn(
+					"mt-1 overflow-hidden text-start transition-all md:hidden",
+					{
+						"max-h-0 opacity-0": !open,
+						"max-h-96 opacity-100": open,
+					},
+				)}
 			>
 				<p className="text-xs leading-snug">{children}</p>
 			</div>
-		</article>
+		</button>
 	);
 };
