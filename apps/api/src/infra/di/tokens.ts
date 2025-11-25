@@ -27,6 +27,7 @@ import type {
 	AccountStoreHistoryUseCase,
 	AuditAccountUseCase,
 	ChangePasswordWithOldUseCase,
+	ChangePasswordWithTokenUseCase,
 	ConfigInfoUseCase,
 	ConfigUpdateUseCase,
 	SessionAuthenticatedUseCase,
@@ -179,6 +180,9 @@ export const TOKENS = {
 		token<AccountGeneratePasswordResetUseCase>(
 			"AccountGeneratePasswordResetUseCase",
 		),
+	AccountChangePasswordWithTokenUseCase: token<ChangePasswordWithTokenUseCase>(
+		"AccountChangePasswordWithTokenUseCase",
+	),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
 

@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ORPCError } from "@orpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -53,6 +53,7 @@ type FormValuesWithoutCode = z.infer<typeof FormSchemaWithoutCode>;
 type FormValues = FormValuesWithCode | FormValuesWithoutCode;
 
 export const AccountResetPasswordForm = () => {
+	const [alreadyGenerated, setAlreadyGenerated] = useState(false);
 	const { config } = useConfig();
 	const needConfirmation = config.account.passwordResetConfirmationRequired;
 	const navigate = useNavigate();
@@ -62,6 +63,21 @@ export const AccountResetPasswordForm = () => {
 		isPending: isPendingChangePasswordWithOld,
 	} = useMutation(
 		api.query.miforge.accounts.password.changeWithOld.mutationOptions(),
+	);
+
+	const {
+		mutateAsync: generateToken,
+		isPending: isPendingGenerateToken,
+		isSuccess: isSuccessGenerateToken,
+	} = useMutation(
+		api.query.miforge.accounts.password.generateReset.mutationOptions(),
+	);
+
+	const {
+		mutateAsync: resetPasswordWithCode,
+		isPending: isPendingResetPasswordWithCode,
+	} = useMutation(
+		api.query.miforge.accounts.password.changeWithToken.mutationOptions(),
 	);
 
 	const schema = useMemo(() => {
@@ -83,10 +99,33 @@ export const AccountResetPasswordForm = () => {
 		form.reset();
 	}, [needConfirmation, form.reset]);
 
+	const handleGenerateCode = useCallback(async () => {
+		try {
+			await generateToken({});
+
+			toast.success("Password reset code generated and sent to your email.");
+		} catch (error) {
+			if (error instanceof ORPCError) {
+				if (error.status === 409) {
+					setAlreadyGenerated(true);
+				}
+
+				return toast.error(`${error.message}`);
+			}
+
+			toast.error("An unexpected error occurred. Please try again.");
+		}
+	}, [generateToken]);
+
 	const handleSubmit = useCallback(
 		async (data: FormValues) => {
 			try {
 				if (needConfirmation && "code" in data) {
+					await resetPasswordWithCode({
+						token: data.code,
+						newPassword: data.newPassword,
+						confirmPassword: data.confirmNewPassword,
+					});
 				}
 
 				if (!needConfirmation && "oldPassword" in data) {
@@ -95,16 +134,14 @@ export const AccountResetPasswordForm = () => {
 						newPassword: data.newPassword,
 						confirmPassword: data.confirmNewPassword,
 					});
-
-					toast.success("Password changed successfully");
-
-					navigate({
-						to: "/account/details",
-						replace: true,
-					});
-
-					return;
 				}
+
+				toast.success("Password reset successfully");
+
+				navigate({
+					to: "/account/details",
+					replace: true,
+				});
 			} catch (error) {
 				if (error instanceof ORPCError) {
 					return toast.error(`${error.message}`);
@@ -113,7 +150,7 @@ export const AccountResetPasswordForm = () => {
 				toast.error("An unexpected error occurred. Please try again.");
 			}
 		},
-		[needConfirmation, changePasswordWithOld, navigate],
+		[needConfirmation, changePasswordWithOld, navigate, resetPasswordWithCode],
 	);
 
 	return (
@@ -218,11 +255,28 @@ export const AccountResetPasswordForm = () => {
 							<ButtonImageLink variant="info" to="/account/details">
 								Back
 							</ButtonImageLink>
-							{needConfirmation && (
-								<ButtonImage variant="info" type="button" onClick={() => null}>
-									Generate Code
-								</ButtonImage>
-							)}
+							{needConfirmation &&
+								!isSuccessGenerateToken &&
+								!alreadyGenerated && (
+									<ButtonImage
+										variant="info"
+										type="button"
+										onClick={handleGenerateCode}
+										disabled={isPendingGenerateToken}
+									>
+										Generate Code
+									</ButtonImage>
+								)}
+							{needConfirmation &&
+								(isSuccessGenerateToken || alreadyGenerated) && (
+									<ButtonImage
+										variant="info"
+										type="submit"
+										disabled={isPendingResetPasswordWithCode}
+									>
+										Reset Password
+									</ButtonImage>
+								)}
 							{!needConfirmation && (
 								<ButtonImage
 									variant="info"

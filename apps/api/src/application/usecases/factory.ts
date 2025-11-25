@@ -61,6 +61,9 @@ export class UseCasesFactory {
 		const generatePasswordReset = this.di.resolve(
 			TOKENS.AccountGeneratePasswordResetUseCase,
 		);
+		const changePasswordWithToken = this.di.resolve(
+			TOKENS.AccountChangePasswordWithTokenUseCase,
+		);
 
 		return {
 			create,
@@ -80,6 +83,7 @@ export class UseCasesFactory {
 			confirmEmail,
 			changePasswordWithOld,
 			generatePasswordReset,
+			changePasswordWithToken,
 		} as const;
 	}
 

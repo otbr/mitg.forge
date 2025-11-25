@@ -1,9 +1,9 @@
 import z from "zod";
 
-export const ChangePasswordWithOldContractSchema = {
+export const ChangePasswordWithTokenContractSchema = {
 	input: z
 		.object({
-			oldPassword: z.string().max(100),
+			token: z.string().max(100),
 			newPassword: z
 				.string()
 				.min(8)
@@ -16,7 +16,7 @@ export const ChangePasswordWithOldContractSchema = {
 				}),
 			confirmPassword: z.string().max(100),
 		})
-		.superRefine(({ confirmPassword, newPassword, oldPassword }, ctx) => {
+		.superRefine(({ confirmPassword, newPassword }, ctx) => {
 			if (confirmPassword === newPassword) return;
 
 			ctx.addIssue({
@@ -24,22 +24,14 @@ export const ChangePasswordWithOldContractSchema = {
 				message: "New password and confirm password do not match",
 				path: ["confirmPassword"],
 			});
-
-			if (oldPassword === newPassword) {
-				ctx.addIssue({
-					code: "custom",
-					message: "New password must be different from old password",
-					path: ["newPassword"],
-				});
-			}
 		}),
 	output: z.void(),
 };
 
-export type ChangePasswordWithOldContractInput = z.infer<
-	typeof ChangePasswordWithOldContractSchema.input
+export type ChangePasswordWithTokenContractInput = z.infer<
+	typeof ChangePasswordWithTokenContractSchema.input
 >;
 
-export type ChangePasswordWithOldContractOutput = z.infer<
-	typeof ChangePasswordWithOldContractSchema.output
+export type ChangePasswordWithTokenContractOutput = z.infer<
+	typeof ChangePasswordWithTokenContractSchema.output
 >;

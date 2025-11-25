@@ -17,6 +17,7 @@ import {
 	AccountStoreHistoryUseCase,
 	AuditAccountUseCase,
 	ChangePasswordWithOldUseCase,
+	ChangePasswordWithTokenUseCase,
 	ConfigInfoUseCase,
 	ConfigUpdateUseCase,
 	SessionAuthenticatedUseCase,
@@ -106,6 +107,11 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountGeneratePasswordResetUseCase,
 		{ useClass: AccountGeneratePasswordResetUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountChangePasswordWithTokenUseCase,
+		{ useClass: ChangePasswordWithTokenUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

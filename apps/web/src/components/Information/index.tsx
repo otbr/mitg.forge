@@ -6,8 +6,8 @@ export const Information = () => {
 	return (
 		<Section>
 			<SectionHeader color="red">
-				<div className="flex h-full w-full justify-between">
-					<div className="flex items-center gap-4">
+				<div className="flex h-full w-full justify-between gap-1">
+					<div className="flex items-center justify-end gap-1 md:gap-4">
 						<a
 							href="https://discord.gg/mdUhhmRmRK"
 							target="_blank"
@@ -36,13 +36,13 @@ export const Information = () => {
 					</div>
 					<Link
 						to="/"
-						className="flex flex-row items-center gap-2 font-verdana text-white text-xxs hover:underline"
+						className="flex flex-row items-center justify-end gap-2 font-verdana text-white text-xxs hover:underline"
 					>
 						<img
 							src="/assets/icons/global/icon-players-online.png"
 							alt="players online"
 						/>
-						<span>1245 Players online</span>
+						<span>1245 online</span>
 					</Link>
 				</div>
 			</SectionHeader>

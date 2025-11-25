@@ -26,7 +26,7 @@ export class AccountConfirmationsService {
 	) {
 		if (!confirmation || !token) {
 			throw new ORPCError("NOT_FOUND", {
-				message: "No confirmation request found",
+				message: "No confirmation request found has expired",
 			});
 		}
 
