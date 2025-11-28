@@ -25,7 +25,7 @@ export function AccountConfirmationNewEmail({
 							Please confirm your new email address by clicking the link below:
 						</Text>
 						<Text>
-							<Link href={link} className="text-blue-800 hover:underline">
+							<Link href={link} className="text-blue-800 underline">
 								Confirm Email
 							</Link>
 						</Text>

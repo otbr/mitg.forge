@@ -35,6 +35,17 @@ export class AccountRepository {
 		});
 	}
 
+	resetConfirmEmail(email: string) {
+		return this.prisma.accounts.update({
+			where: {
+				email,
+			},
+			data: {
+				email_confirmed: false,
+			},
+		});
+	}
+
 	confirmEmail(email: string) {
 		return this.prisma.accounts.update({
 			where: {

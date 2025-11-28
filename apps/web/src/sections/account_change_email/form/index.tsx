@@ -3,10 +3,11 @@ import { simplePasswordSchema } from "@miforge/core/schemas";
 import { ORPCError } from "@orpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { Countdown } from "@/components/Countdown";
 import { useConfig } from "@/sdk/contexts/config";
 import { api } from "@/sdk/lib/api/factory";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
@@ -42,6 +43,7 @@ type FormValuesWithoutPassword = z.infer<typeof FormSchemaWithoutPassword>;
 type FormValues = FormValuesWithPassword | FormValuesWithoutPassword;
 
 export const AccountChangeEmailForm = () => {
+	const [redirecting, setRedirecting] = useState<Date | null>(null);
 	const { config } = useConfig();
 	const navigate = useNavigate();
 
@@ -51,6 +53,13 @@ export const AccountChangeEmailForm = () => {
 		isSuccess: isSuccessChangeEmailWithPassword,
 	} = useMutation(
 		api.query.miforge.accounts.email.changeWithPassword.mutationOptions(),
+	);
+
+	const {
+		mutateAsync: generateChangeEmailToken,
+		isPending: isPendingGenerateChangeEmailToken,
+	} = useMutation(
+		api.query.miforge.accounts.email.generateChange.mutationOptions(),
 	);
 
 	const needConfirmation = config.account.emailChangeConfirmationRequired;
@@ -83,8 +92,11 @@ export const AccountChangeEmailForm = () => {
 						"Email changed successfully. You need to login again. All your sessions have been revoked.",
 					);
 
-					// Wait for 1.5 seconds to let the user read the toast
-					await new Promise((resolve) => setTimeout(resolve, 1500));
+					// Wait for 5 seconds to let the user read the toast
+					const date = new Date();
+					date.setSeconds(date.getSeconds() + 5);
+					setRedirecting(date);
+					await new Promise((resolve) => setTimeout(resolve, 5000));
 
 					navigate({
 						to: "/login",
@@ -92,6 +104,17 @@ export const AccountChangeEmailForm = () => {
 						reloadDocument: true,
 					});
 
+					return;
+				}
+
+				if (needConfirmation) {
+					await generateChangeEmailToken({ newEmail: data.newEmail });
+
+					toast.success(
+						"An email has been sent to your address. Please follow the instructions to confirm the change.",
+					);
+
+					navigate({ to: "/account/details" });
 					return;
 				}
 			} catch (error) {
@@ -102,7 +125,12 @@ export const AccountChangeEmailForm = () => {
 				toast.error("An unexpected error occurred. Please try again.");
 			}
 		},
-		[changeEmailWithPassword, navigate, needConfirmation],
+		[
+			changeEmailWithPassword,
+			navigate,
+			needConfirmation,
+			generateChangeEmailToken,
+		],
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <need to trigger form reset when config changes>
@@ -164,6 +192,14 @@ export const AccountChangeEmailForm = () => {
 							/>
 						</div>
 					</InnerContainer>
+					{redirecting && (
+						<InnerContainer>
+							<p className="text-center text-secondary">
+								You are being redirected to login. Please wait
+								<Countdown targetDate={redirecting} />.
+							</p>
+						</InnerContainer>
+					)}
 					<InnerContainer>
 						<div className="flex flex-row flex-wrap items-end justify-end gap-2">
 							<ButtonImageLink variant="info" to="/account/details">
@@ -174,7 +210,8 @@ export const AccountChangeEmailForm = () => {
 								type="submit"
 								disabled={
 									isPendingChangeEmailWithPassword ||
-									isSuccessChangeEmailWithPassword
+									isSuccessChangeEmailWithPassword ||
+									isPendingGenerateChangeEmailToken
 								}
 							>
 								Change Email

@@ -3,6 +3,7 @@ import {
 	AccountCancelDeleteCharacterUseCase,
 	AccountChangeEmailWithPasswordUseCase,
 	AccountCharactersBySessionUseCase,
+	AccountConfirmEmailChangeUseCase,
 	AccountConfirmEmailUseCase,
 	AccountCreateCharacterUseCase,
 	AccountCreateUseCase,
@@ -10,10 +11,12 @@ import {
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
+	AccountGenerateEmailChangeUseCase,
 	AccountGeneratePasswordResetUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
 	AccountPermissionedUseCase,
+	AccountPreviewEmailChangeUseCase,
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
 	AuditAccountUseCase,
@@ -139,6 +142,21 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.AccountChangeEmailWithPasswordUseCase,
 		{ useClass: AccountChangeEmailWithPasswordUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountGenerateEmailChangeUseCase,
+		{ useClass: AccountGenerateEmailChangeUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountPreviewEmailChangeUseCase,
+		{ useClass: AccountPreviewEmailChangeUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.AccountConfirmEmailChangeUseCase,
+		{ useClass: AccountConfirmEmailChangeUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 
