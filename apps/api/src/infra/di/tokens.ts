@@ -11,7 +11,9 @@ import type {
 } from "@/application/services";
 import type {
 	AccountCancelDeleteCharacterUseCase,
+	AccountChangeEmailWithPasswordUseCase,
 	AccountCharactersBySessionUseCase,
+	AccountConfirmEmailChangeUseCase,
 	AccountConfirmEmailUseCase,
 	AccountCreateCharacterUseCase,
 	AccountCreateUseCase,
@@ -19,10 +21,12 @@ import type {
 	AccountDetailsBySessionUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
+	AccountGenerateEmailChangeUseCase,
 	AccountGeneratePasswordResetUseCase,
 	AccountLoginUseCase,
 	AccountLogoutUseCase,
 	AccountPermissionedUseCase,
+	AccountPreviewEmailChangeUseCase,
 	AccountRegistrationUseCase,
 	AccountStoreHistoryUseCase,
 	AuditAccountUseCase,
@@ -182,6 +186,19 @@ export const TOKENS = {
 		),
 	AccountChangePasswordWithTokenUseCase: token<ChangePasswordWithTokenUseCase>(
 		"AccountChangePasswordWithTokenUseCase",
+	),
+	AccountChangeEmailWithPasswordUseCase:
+		token<AccountChangeEmailWithPasswordUseCase>(
+			"AccountChangeEmailWithPasswordUseCase",
+		),
+	AccountGenerateEmailChangeUseCase: token<AccountGenerateEmailChangeUseCase>(
+		"AccountGenerateEmailChangeUseCase",
+	),
+	AccountPreviewEmailChangeUseCase: token<AccountPreviewEmailChangeUseCase>(
+		"AccountPreviewEmailChangeUseCase",
+	),
+	AccountConfirmEmailChangeUseCase: token<AccountConfirmEmailChangeUseCase>(
+		"AccountConfirmEmailChangeUseCase",
 	),
 
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),

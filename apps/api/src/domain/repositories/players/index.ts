@@ -93,6 +93,30 @@ export class PlayersRepository {
 		return !!player;
 	}
 
+	async allCharactersWithOnlineStatus(accountId: number) {
+		const characters = await this.prisma.players.findMany({
+			where: {
+				account_id: accountId,
+			},
+			orderBy: {
+				name: "asc",
+			},
+		});
+
+		const onlinePlayers = await this.prisma.players_online.findMany({
+			where: {
+				player_id: { in: characters.map((c) => c.id) },
+			},
+		});
+
+		const onlinePlayerIds = new Set(onlinePlayers.map((p) => p.player_id));
+
+		return characters.map((character) => ({
+			...character,
+			online: onlinePlayerIds.has(character.id),
+		}));
+	}
+
 	async areOnline(playerIds: number[]) {
 		const onlinePlayers = await this.prisma.players_online.findMany({
 			where: {

@@ -35,6 +35,7 @@ const miforgeConfig = MiforgeConfigSchema.decode({
   },
   account: {
     emailConfirmationRequired: Boolean(env.MAILER_PROVIDER),
+    emailChangeConfirmationRequired: Boolean(env.MAILER_PROVIDER),
     passwordResetConfirmationRequired: Boolean(env.MAILER_PROVIDER)
   }
 })

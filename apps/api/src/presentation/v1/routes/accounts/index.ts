@@ -4,6 +4,7 @@ import { accountCharactersRoutes } from "./characters";
 import { confirmEmailAccountRoute } from "./confirmEmail";
 import { createAccountRoute } from "./create";
 import { detailsRoute } from "./details";
+import { emailRoutes } from "./email";
 import { loginRoute } from "./login";
 import { logoutRoute } from "./logout";
 import { accountPasswordRoutes } from "./password";
@@ -21,4 +22,5 @@ export const accountsRouter = base.prefix("/accounts").tag("Accounts").router({
 	audit: auditHistoryRoute,
 	confirmEmail: confirmEmailAccountRoute,
 	password: accountPasswordRoutes,
+	email: emailRoutes,
 });

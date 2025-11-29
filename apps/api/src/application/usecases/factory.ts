@@ -64,6 +64,18 @@ export class UseCasesFactory {
 		const changePasswordWithToken = this.di.resolve(
 			TOKENS.AccountChangePasswordWithTokenUseCase,
 		);
+		const changeEmailWithPassword = this.di.resolve(
+			TOKENS.AccountChangeEmailWithPasswordUseCase,
+		);
+		const generateEmailChange = this.di.resolve(
+			TOKENS.AccountGenerateEmailChangeUseCase,
+		);
+		const previewEmailChange = this.di.resolve(
+			TOKENS.AccountPreviewEmailChangeUseCase,
+		);
+		const confirmEmailChange = this.di.resolve(
+			TOKENS.AccountConfirmEmailChangeUseCase,
+		);
 
 		return {
 			create,
@@ -84,6 +96,10 @@ export class UseCasesFactory {
 			changePasswordWithOld,
 			generatePasswordReset,
 			changePasswordWithToken,
+			changeEmailWithPassword,
+			generateEmailChange,
+			previewEmailChange,
+			confirmEmailChange,
 		} as const;
 	}
 

@@ -13,6 +13,7 @@ export class AccountConfirmationsRepository {
 	async findByAccountAndType(
 		accountId: number,
 		type: MiforgeAccountConfirmationType,
+		token?: string,
 	) {
 		return this.database.miforge_account_confirmations.findFirst({
 			where: {
@@ -23,6 +24,7 @@ export class AccountConfirmationsRepository {
 				},
 				confirmed_at: null,
 				cancelled_at: null,
+				...(token ? { token } : {}),
 			},
 		});
 	}
@@ -45,6 +47,7 @@ export class AccountConfirmationsRepository {
 			channel: MiforgeAccountConfirmationChannel;
 			token: string;
 			expiresAt: Date;
+			value?: string;
 		},
 	) {
 		return this.database.miforge_account_confirmations.create({
@@ -54,6 +57,7 @@ export class AccountConfirmationsRepository {
 				type: data.type,
 				token: data.token,
 				expires_at: data.expiresAt,
+				value: data.value,
 			},
 		});
 	}

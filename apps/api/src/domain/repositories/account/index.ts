@@ -13,6 +13,17 @@ export class AccountRepository {
 		private readonly auditRepository: AuditRepository,
 	) {}
 
+	updateEmail(accountId: number, email: string) {
+		return this.prisma.accounts.update({
+			where: {
+				id: accountId,
+			},
+			data: {
+				email,
+			},
+		});
+	}
+
 	updatePassword(accountId: number, hashedPassword: string) {
 		return this.prisma.accounts.update({
 			where: {
@@ -20,6 +31,17 @@ export class AccountRepository {
 			},
 			data: {
 				password: hashedPassword,
+			},
+		});
+	}
+
+	resetConfirmEmail(email: string) {
+		return this.prisma.accounts.update({
+			where: {
+				email,
+			},
+			data: {
+				email_confirmed: false,
 			},
 		});
 	}
