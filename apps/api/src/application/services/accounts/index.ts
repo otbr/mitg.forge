@@ -275,9 +275,6 @@ export class AccountsService {
 			});
 		}
 
-		/**
-		 * TODO: Remove characters from this, to be in another route.
-		 */
 		return {
 			...account,
 			sessions: account.sessions,
@@ -515,10 +512,6 @@ export class AccountsService {
 				recoveryKey = this.recoveryKey.generate();
 			}
 
-			/**
-			 * TODO: Find a better way to handle subject and template naming conventions.
-			 * Maybe whe can implement i18n here as well.
-			 */
 			this.emailQueue.add({
 				kind: "EmailJob",
 				to: account.email,
