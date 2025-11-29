@@ -5,6 +5,7 @@ import {
 	AuditRepository,
 	ConfigLiveRepository,
 	ConfigRepository,
+	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
@@ -53,6 +54,11 @@ export function registerRepositories() {
 	container.register(
 		TOKENS.ConfigRepository,
 		{ useClass: ConfigRepository },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+	container.register(
+		TOKENS.OtsServerRepository,
+		{ useClass: OtsServerRepository },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

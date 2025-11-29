@@ -40,7 +40,7 @@ import type {
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
-import type { Mailer, Prisma, Redis } from "@/domain/clients";
+import type { Mailer, OtsServerClient, Prisma, Redis } from "@/domain/clients";
 import type { AppLivePublisher } from "@/domain/clients/live/types";
 import type {
 	Cache,
@@ -63,6 +63,7 @@ import type {
 	AuditRepository,
 	ConfigLiveRepository,
 	ConfigRepository,
+	OtsServerRepository,
 	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
@@ -89,6 +90,7 @@ export const TOKENS = {
 	EventCommander: token<Redis>("EventCommander"),
 	EventSubscriber: token<Redis>("EventSubscriber"),
 	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
+	OtsServerClient: token<OtsServerClient>("OtsServerClient"),
 
 	// Queues
 	EmailQueue: token<EmailQueue>("EmailQueue"),
@@ -125,6 +127,7 @@ export const TOKENS = {
 	AuditRepository: token<AuditRepository>("AuditRepository"),
 	ConfigLiveRepository: token<ConfigLiveRepository>("ConfigLiveRepository"),
 	ConfigRepository: token<ConfigRepository>("ConfigRepository"),
+	OtsServerRepository: token<OtsServerRepository>("OtsServerRepository"),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),

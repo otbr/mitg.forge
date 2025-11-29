@@ -6,6 +6,7 @@ import type { RootLogger } from "@/domain/modules";
 import { makeRequestLogger } from "@/domain/modules";
 import { env } from "@/infra/env";
 import {
+	registerClients,
 	registerCore,
 	registerJobs,
 	registerModules,
@@ -13,6 +14,7 @@ import {
 	registerServices,
 	registerUseCases,
 } from "./containers";
+
 import { TOKENS } from "./tokens";
 
 declare global {
@@ -28,6 +30,7 @@ export function bootstrapContainer() {
 	}
 
 	registerCore();
+	registerClients();
 	registerJobs();
 	registerModules();
 	registerRepositories();

@@ -5,6 +5,7 @@ export * from "./audit";
 export * from "./config";
 export * from "./confirmations";
 export * from "./live";
+export * from "./otsServer";
 export * from "./players";
 export * from "./session";
 export * from "./worlds";
