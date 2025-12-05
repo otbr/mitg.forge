@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { FormFieldRecoveryKey } from "@/components/Forms/FormFieldRecoveryKey";
 import { api } from "@/sdk/lib/api/factory";
 import { withORPCErrorHandling } from "@/sdk/utils/orpc";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
@@ -88,31 +89,9 @@ export const AccountLostPasswordResetRkForm = () => {
 				<form onSubmit={form.handleSubmit(handleSubmit)}>
 					<InnerContainer>
 						<div className="flex flex-col gap-1 p-1">
-							<FormField
-								control={form.control}
-								name="recoveryKey"
-								render={({ field: { onChange, value, ...field } }) => {
-									return (
-										<FormItem className="flex flex-1 flex-col gap-0.5 md:flex-row md:items-center">
-											<FormLabel className="min-w-35">Recovery Key:</FormLabel>
-											<div className="flex w-full flex-col">
-												<FormControl>
-													<Input
-														{...field}
-														placeholder="Recovery Key..."
-														value={value}
-														disabled={isPending || isSuccess}
-														onChange={(event) => {
-															onChange(event.target.value);
-														}}
-														className="max-w-sm"
-													/>
-												</FormControl>
-												<FormMessage className="text-red-500" />
-											</div>
-										</FormItem>
-									);
-								}}
+							<FormFieldRecoveryKey
+								disabled={isPending || isSuccess}
+								form={form}
 							/>
 							<FormField
 								control={form.control}

@@ -5,21 +5,14 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { FormFieldRecoveryKey } from "@/components/Forms/FormFieldRecoveryKey";
 import { api } from "@/sdk/lib/api/factory";
 import { withORPCErrorHandling } from "@/sdk/utils/orpc";
 import { ButtonImage } from "@/ui/Buttons/ButtonImage";
 import { ButtonImageLink } from "@/ui/Buttons/ButtonImageLink";
 import { Container } from "@/ui/Container";
 import { InnerContainer } from "@/ui/Container/Inner";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/ui/Form";
-import { Input } from "@/ui/Input";
+import { Form } from "@/ui/Form";
 
 const FormSchema = z.object({
 	recoveryKey: z
@@ -82,34 +75,9 @@ export const AccountLost2FAResetRkForm = () => {
 				<form onSubmit={form.handleSubmit(handleSubmit)}>
 					<InnerContainer>
 						<div className="flex flex-col gap-1 p-1">
-							<FormField
-								control={form.control}
-								name="recoveryKey"
-								render={({ field: { onChange, value, ...field } }) => {
-									return (
-										<FormItem className="flex flex-1 flex-col gap-0.5 md:flex-row md:items-center">
-											<FormLabel className="min-w-35">Recovery Key:</FormLabel>
-											<div className="flex w-full flex-col">
-												<FormControl>
-													<Input
-														{...field}
-														placeholder="Recovery Key..."
-														value={value}
-														disabled={
-															isResetting ||
-															isResetTwoFactorWithRecoveryKeySuccess
-														}
-														onChange={(event) => {
-															onChange(event.target.value);
-														}}
-														className="max-w-sm"
-													/>
-												</FormControl>
-												<FormMessage className="text-red-500" />
-											</div>
-										</FormItem>
-									);
-								}}
+							<FormFieldRecoveryKey
+								disabled={isResetting || isResetTwoFactorWithRecoveryKeySuccess}
+								form={form}
 							/>
 						</div>
 					</InnerContainer>
@@ -124,7 +92,7 @@ export const AccountLost2FAResetRkForm = () => {
 								disabled={isResetting || isResetTwoFactorWithRecoveryKeySuccess}
 								loading={isResetting}
 							>
-								Change
+								Reset 2FA
 							</ButtonImage>
 						</div>
 					</InnerContainer>

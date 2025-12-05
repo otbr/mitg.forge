@@ -214,7 +214,7 @@ export class AccountTwoFactorService {
 		await this.auditService.createAudit(AuditAction.DISABLED_TWO_FACTOR, {
 			accountId: account.id,
 			success: true,
-			details: "Two-factor authentication disabled via removal service",
+			details: "Two-factor authentication disabled via recovery key",
 		});
 
 		this.emailQueue.add({
@@ -222,7 +222,7 @@ export class AccountTwoFactorService {
 			template: "AccountTwoFactorDisabled",
 			props: {},
 			to: account.email,
-			subject: "Two-Factor Authentication Disabled",
+			subject: "Two-Factor Authentication Disabled via Recovery Key",
 		});
 	}
 }
