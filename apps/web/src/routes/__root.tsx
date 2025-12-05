@@ -4,11 +4,13 @@ import {
 	Outlet,
 } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+import { Layout } from "@/layout";
 import type { RouterContext } from "@/router";
 import { ConfigProvider } from "@/sdk/contexts/config";
 import { SessionProvider } from "@/sdk/contexts/session";
 import { env } from "@/sdk/env";
 import { api } from "@/sdk/lib/api/factory";
+import { NotFoundSection } from "@/sections/not_found";
 
 const ReactQueryDevtools = lazy(() =>
 	import("@tanstack/react-query-devtools").then((mod) => ({
@@ -23,6 +25,11 @@ const TanStackRouterDevtools = lazy(() =>
 );
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+	notFoundComponent: () => (
+		<Layout>
+			<NotFoundSection />
+		</Layout>
+	),
 	head: () => ({
 		meta: [
 			{

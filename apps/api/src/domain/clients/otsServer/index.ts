@@ -5,7 +5,7 @@ import { TOKENS } from "@/infra/di/tokens";
 
 @injectable()
 export class OtsServerClient {
-	private readonly timeout = 5000;
+	private readonly timeout = 250;
 
 	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {}
 
