@@ -311,12 +311,6 @@ export class LostAccountService {
 			token: twoFactorToken,
 		});
 
-		await this.accountTwoFactorService.validateTwoFactorToken({
-			enabled: account.two_factor_enabled,
-			secret: account.two_factor_secret,
-			token: twoFactorToken,
-		});
-
 		const emailAlreadyInUse =
 			await this.accountRepository.findByEmail(newEmail);
 

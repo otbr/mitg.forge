@@ -97,8 +97,8 @@ export const AccountLostChangeEmailRkForm = () => {
 						</span>
 						<span>
 							Changing the email address associated with your account using the
-							invalidate all existing sessions, and you will need to log in
-							again with the new email address.
+							recovery key will invalidate all existing sessions, and you will
+							need to log in again with the new email address.
 						</span>
 						<span>
 							If your email has a 2FA authenticator app linked, you will need to
