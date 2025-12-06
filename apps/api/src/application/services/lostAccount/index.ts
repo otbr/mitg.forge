@@ -6,6 +6,7 @@ import type {
 	AccountConfirmationsRepository,
 	AccountRegistrationRepository,
 	AccountRepository,
+	PlayersRepository,
 	SessionRepository,
 } from "@/domain/repositories";
 import { TOKENS } from "@/infra/di/tokens";
@@ -37,6 +38,8 @@ export class LostAccountService {
 		private readonly recoveryKeyService: RecoveryKeyService,
 		@inject(TOKENS.AccountTwoFactorService)
 		private readonly accountTwoFactorService: AccountTwoFactorService,
+		@inject(TOKENS.PlayersRepository)
+		private readonly playersRepository: PlayersRepository,
 	) {}
 
 	private async accountExists(emailOrCharacterName: string) {
@@ -253,5 +256,115 @@ export class LostAccountService {
 		}
 
 		await this.accountTwoFactorService.removeTwoFactor(account.email);
+	}
+
+	@Catch()
+	async changeEmailWithRecoveryKey(
+		oldEmail: string,
+		newEmail: string,
+		recoveryKey: string,
+		twoFactorToken?: string,
+	) {
+		const account = await this.accountRepository.findByEmail(oldEmail);
+
+		if (!account) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid recovery data",
+			});
+		}
+
+		const characters =
+			await this.playersRepository.allCharactersWithOnlineStatus(account.id);
+
+		const anyCharacterOnline = characters.some((char) => char.online);
+
+		if (anyCharacterOnline) {
+			throw new ORPCError("FORBIDDEN", {
+				message:
+					"Cannot change email while one or more characters are online. Please log out all characters and try again.",
+			});
+		}
+
+		const registration =
+			await this.accountRegistrationRepository.findByAccountId(account.id);
+
+		if (!registration?.recoveryKey) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid recovery data",
+			});
+		}
+
+		const isValid = await this.recoveryKeyService.isValid(
+			recoveryKey,
+			registration.recoveryKey,
+		);
+
+		if (!isValid) {
+			throw new ORPCError("UNAUTHORIZED", {
+				message: "Invalid recovery data",
+			});
+		}
+
+		await this.accountTwoFactorService.validateTwoFactorToken({
+			enabled: account.two_factor_enabled,
+			secret: account.two_factor_secret,
+			token: twoFactorToken,
+		});
+
+		const emailAlreadyInUse =
+			await this.accountRepository.findByEmail(newEmail);
+
+		if (emailAlreadyInUse) {
+			throw new ORPCError("CONFLICT", {
+				message: "The new email is already in use by another account.",
+			});
+		}
+
+		// Disable two-factor authentication, clear sessions, and change email
+		await this.accountRepository.updateTwoFactor(account.id, {
+			two_factor_enabled: false,
+			two_factor_secret: null,
+			two_factor_temp_secret: null,
+			two_factor_confirmed_at: null,
+		});
+		// Clear all sessions for the account
+		await this.sessionRepository.clearAllSessionByAccountId(account.id);
+
+		await this.accountRepository.updateEmail(account.id, newEmail);
+
+		await this.auditService.createAudit("CHANGED_EMAIL_WITH_RECOVERY_KEY", {
+			details: "Email changed using recovery key for account",
+			success: true,
+			accountId: account.id,
+			metadata: {
+				oldEmail: oldEmail,
+				newEmail: newEmail,
+			},
+		});
+
+		await this.auditService.createAudit("DISABLED_TWO_FACTOR", {
+			details:
+				"Two-factor authentication disabled due to email change via recovery key",
+			success: true,
+			accountId: account.id,
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountChangedEmail",
+			props: {
+				newEmail: newEmail,
+			},
+			subject: "Your account email has been changed using recovery key",
+			to: oldEmail,
+		});
+
+		this.emailQueue.add({
+			kind: "EmailJob",
+			template: "AccountNewEmail",
+			props: {},
+			subject: "New email associated with your account",
+			to: newEmail,
+		});
 	}
 }
