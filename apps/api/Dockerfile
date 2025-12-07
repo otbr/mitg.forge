@@ -54,8 +54,8 @@ RUN mkdir -p "${OUTFIT_FOLDER}" \
   # encontra a primeira pasta com o nome configurado (ex: outfits_anim)
   && OUTFITS_SRC_DIR="$(find /tmp/outfits -type d -name "${OUTFIT_INNER_NAME}" | head -n 1)" \
   && if [ -z "$OUTFITS_SRC_DIR" ]; then echo "Erro: não encontrei pasta '${OUTFIT_INNER_NAME}' dentro do zip" && exit 1; fi \
-  && echo "Encontrado: ${OUTFITS_SRC_DIR} -> ${OUTFIT_FOLDER}" \
-  && mv "$OUTFITS_SRC_DIR" "${OUTFIT_FOLDER}" \
+  && echo "Copiando conteúdo de ${OUTFITS_SRC_DIR} -> ${OUTFIT_FOLDER}" \
+  && mv "$OUTFITS_SRC_DIR"/* "${OUTFIT_FOLDER}/" \
   && rm -rf /tmp/outfits /tmp/outfits.zip
 
 RUN pnpm db:generate
