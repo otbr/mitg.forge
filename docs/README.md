@@ -40,7 +40,6 @@ MiForge is a portal/AAC inspired by **tibia.com**, focused on multi-world, perfo
 |----------|-----------|
 | AAC/API  | 🟢 Active |
 | Web      | 🟢 Active |
-| Launcher | ⚪ Planned |
 | Client / Launcher   | ⚪ Planned |
 
   </div>
