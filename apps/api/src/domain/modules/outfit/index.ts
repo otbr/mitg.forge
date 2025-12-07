@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { cwd } from "node:process";
 import {
 	type Canvas,
 	createCanvas,
@@ -52,12 +53,9 @@ export type OutfitAnimation = {
 
 @injectable()
 export class Outfit {
-	private readonly folder: string;
+	private readonly folder = `${cwd()}/${env.OUTFIT_FOLDER}`;
 
-	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {
-		const base = env.OUTFIT_FOLDER;
-		this.folder = path.isAbsolute(base) ? base : path.join(process.cwd(), base);
-	}
+	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {}
 
 	private async folderExists(path: string): Promise<boolean> {
 		try {
