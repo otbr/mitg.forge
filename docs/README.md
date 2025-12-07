@@ -20,11 +20,31 @@ MiForge is a portal/AAC inspired by **tibia.com**, focused on multi-world, perfo
 
 🔗 **Preview:** <https://miforge.mitg.dev>  
 
+<div style="text-align: center; display: grid; grid-template-columns: 1fr 1fr;">
+  <div>
+
+## Project Progress
+
 | TODO | Status | PR |
 |---|---|---|
-| AAC (Front / API) | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/20) | None
-| Launcher | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0) | None
-| Client | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0) | None
+| AAC (API) | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/20) | None
+| AAC (Web) | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/20) | None
+| Client / Launcher | ![](https://us-central1-progress-markdown.cloudfunctions.net/progress/0) | None
+
+  </div>
+  <div>
+
+## Project Status
+
+| Module   | Status    |
+|----------|-----------|
+| AAC/API  | 🟢 Active |
+| Web      | 🟢 Active |
+| Launcher | ⚪ Planned |
+| Client / Launcher   | ⚪ Planned |
+
+  </div>
+</div>
 
 ---
 
