@@ -19,6 +19,8 @@ RUN pnpm install -r --prefer-offline
 
 WORKDIR /repo/apps/api
 
+
+
 # ================================
 # OUTFITS CONFIG
 # ================================
@@ -26,10 +28,21 @@ WORKDIR /repo/apps/api
 ARG OUTFIT_FOLDER=generated/outfits
 ENV OUTFIT_FOLDER=${OUTFIT_FOLDER}
 
-# URL do zip de outfits
-ARG OUTFIT_ARCHIVE_URL="https://ots.me/downloads/data/outfit-images/latest_walk.zip"
-ENV OUTFIT_ARCHIVE_URL=${OUTFIT_ARCHIVE_URL}
+# configuração do repositório do GitHub onde estão os outfits
+ENV GITHUB_OWNER=mitgdev
+ENV GITHUB_REPO=mitg.forge
 
+# tag de release do GitHub onde estão os outfits
+ARG GITHUB_OUTFITS_RELEASE_TAG=miforge-outfits-15.11
+ENV GITHUB_OUTFITS_RELEASE_TAG=${GITHUB_OUTFITS_RELEASE_TAG}
+
+# nome do arquivo zip de outfits
+ARG GITHUB_OUTFITS_FILE=outfits.zip
+ENV GITHUB_OUTFITS_FILE=${GITHUB_OUTFITS_FILE}
+
+# URL do zip de outfits
+ARG OUTFIT_ARCHIVE_URL="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/${GITHUB_OUTFITS_RELEASE_TAG}/${GITHUB_OUTFITS_FILE}"
+ENV OUTFIT_ARCHIVE_URL=${OUTFIT_ARCHIVE_URL}
 # nome da pasta que queremos pegar de dentro do zip (ex: outfits_anim)
 ARG OUTFIT_INNER_NAME=outfits_anim
 ENV OUTFIT_INNER_NAME=${OUTFIT_INNER_NAME}
