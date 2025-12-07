@@ -63,7 +63,7 @@ const FRONTEND_CONFIG_SCHEMA = z.object({
 });
 
 const OUTFIT_CONFIG_SCHEMA = z.object({
-	OUTFIT_FOLDER: z.string().default("/generated/outfits"),
+	OUTFIT_FOLDER: z.string().default("generated/outfits"),
 });
 
 const envSchema = z.object({

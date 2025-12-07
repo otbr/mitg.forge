@@ -52,9 +52,12 @@ export type OutfitAnimation = {
 
 @injectable()
 export class Outfit {
-	private readonly folder = `${process.cwd()}${env.OUTFIT_FOLDER}`;
+	private readonly folder: string;
 
-	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {}
+	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {
+		const base = env.OUTFIT_FOLDER;
+		this.folder = path.isAbsolute(base) ? base : path.join(process.cwd(), base);
+	}
 
 	private async folderExists(path: string): Promise<boolean> {
 		try {
