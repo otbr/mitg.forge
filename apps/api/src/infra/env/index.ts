@@ -63,7 +63,10 @@ const FRONTEND_CONFIG_SCHEMA = z.object({
 });
 
 const OUTFIT_CONFIG_SCHEMA = z.object({
-	OUTFIT_FOLDER: z.string().default("generated/outfits"),
+	OUTFIT_FOLDER: z
+		.string()
+		.default("generated/outfits")
+		.transform((value) => value.replace(/^\/+/, "").replace(/\/+$/, "")),
 });
 
 const envSchema = z.object({
@@ -127,3 +130,7 @@ export const env = envSchema
 		}
 	})
 	.parse(process.env);
+
+console.log("Loaded environment variables:", {
+	OUTFIT_FOLDER: env.OUTFIT_FOLDER,
+});

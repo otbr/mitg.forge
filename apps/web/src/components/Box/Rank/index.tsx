@@ -46,7 +46,7 @@ const mockPlayers: Array<{
 ];
 
 export const RankBox = () => {
-	const { data: preview } = useQuery(
+	const { data: preview, isPending } = useQuery(
 		api.query.miforge.outfit.list.queryOptions({
 			input: {
 				parameters: [
@@ -169,6 +169,7 @@ export const RankBox = () => {
 									<OutfitAnimation
 										frames={outfitFrames}
 										className="-left-8 absolute bottom-1.5 h-16 w-16"
+										loading={isPending}
 									/>
 								</div>
 								<div className="flex flex-col">

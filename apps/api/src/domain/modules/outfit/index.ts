@@ -51,9 +51,19 @@ export type OutfitAnimation = {
 	duration: number;
 };
 
+function resolveOutfitFolder(): string {
+	const raw = env.OUTFIT_FOLDER;
+
+	if (path.isAbsolute(raw)) {
+		return raw;
+	}
+
+	return path.join(cwd(), raw);
+}
+
 @injectable()
 export class Outfit {
-	private readonly folder = `${cwd()}/${env.OUTFIT_FOLDER}`;
+	private readonly folder = resolveOutfitFolder();
 
 	constructor(@inject(TOKENS.Logger) private readonly logger: Logger) {}
 

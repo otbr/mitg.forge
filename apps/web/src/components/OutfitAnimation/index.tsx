@@ -13,6 +13,7 @@ type Props = {
 	height?: number;
 	className?: string;
 	showNotFoundImage?: boolean;
+	loading?: boolean;
 };
 
 export const OutfitAnimation = ({
@@ -21,6 +22,7 @@ export const OutfitAnimation = ({
 	height = 64,
 	className,
 	showNotFoundImage = true,
+	loading = false,
 }: Props) => {
 	const { frame } = useOutfitAnimation(frames);
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -42,6 +44,10 @@ export const OutfitAnimation = ({
 			ctx.drawImage(img, 0, 0, width, height);
 		};
 	}, [frame, width, height]);
+
+	if (loading) {
+		return null;
+	}
 
 	if (showNotFoundImage === false && !frames.length) {
 		return null;
