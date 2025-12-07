@@ -3,7 +3,7 @@ WORKDIR /repo
 RUN corepack enable
 
 # instale bun runtime (não use "pnpm add -g bun")
-RUN apk add --no-cache curl bash \
+RUN apk add --no-cache curl bash unzip \
   && curl -fsSL https://bun.sh/install | bash \
   && ln -sf /root/.bun/bin/bun /usr/local/bin/bun
 
@@ -18,6 +18,46 @@ COPY packages packages
 RUN pnpm install -r --prefer-offline
 
 WORKDIR /repo/apps/api
+
+
+
+# ================================
+# OUTFITS CONFIG
+# ================================
+# pasta destino dentro do container, relativa ao WORKDIR
+ARG OUTFIT_FOLDER=generated/outfits
+ENV OUTFIT_FOLDER=${OUTFIT_FOLDER}
+
+# configuração do repositório do GitHub onde estão os outfits
+ENV GITHUB_OWNER=mitgdev
+ENV GITHUB_REPO=mitg.forge
+
+# tag de release do GitHub onde estão os outfits
+ARG GITHUB_OUTFITS_RELEASE_TAG=miforge-outfits-15.11
+ENV GITHUB_OUTFITS_RELEASE_TAG=${GITHUB_OUTFITS_RELEASE_TAG}
+
+# nome do arquivo zip de outfits
+ARG GITHUB_OUTFITS_FILE=outfits.zip
+ENV GITHUB_OUTFITS_FILE=${GITHUB_OUTFITS_FILE}
+
+# URL do zip de outfits
+ARG OUTFIT_ARCHIVE_URL="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/${GITHUB_OUTFITS_RELEASE_TAG}/${GITHUB_OUTFITS_FILE}"
+ENV OUTFIT_ARCHIVE_URL=${OUTFIT_ARCHIVE_URL}
+# nome da pasta que queremos pegar de dentro do zip (ex: outfits_anim)
+ARG OUTFIT_INNER_NAME=outfits_anim
+ENV OUTFIT_INNER_NAME=${OUTFIT_INNER_NAME}
+
+RUN mkdir -p "${OUTFIT_FOLDER}" \
+  && echo "Baixando outfits de ${OUTFIT_ARCHIVE_URL}..." \
+  && curl -L "${OUTFIT_ARCHIVE_URL}" -o /tmp/outfits.zip \
+  && unzip -q /tmp/outfits.zip -d /tmp/outfits \
+  # encontra a primeira pasta com o nome configurado (ex: outfits_anim)
+  && OUTFITS_SRC_DIR="$(find /tmp/outfits -type d -name "${OUTFIT_INNER_NAME}" | head -n 1)" \
+  && if [ -z "$OUTFITS_SRC_DIR" ]; then echo "Erro: não encontrei pasta '${OUTFIT_INNER_NAME}' dentro do zip" && exit 1; fi \
+  && echo "Encontrado: ${OUTFITS_SRC_DIR} -> ${OUTFIT_FOLDER}" \
+  && mv "$OUTFITS_SRC_DIR" "${OUTFIT_FOLDER}" \
+  && rm -rf /tmp/outfits /tmp/outfits.zip
+
 RUN pnpm db:generate
 RUN pnpm build
 
