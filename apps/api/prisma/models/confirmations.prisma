@@ -3,6 +3,7 @@ enum MiforgeAccountConfirmationType {
   PASSWORD_RESET
   EMAIL_CHANGE
   LOST_PASSWORD_RESET
+  DISCORD_OAUTH_LINK
 }
 
 enum MiforgeAccountConfirmationChannel {
