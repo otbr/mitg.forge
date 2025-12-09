@@ -183,10 +183,21 @@ export class AccountsService {
 			});
 		}
 
+		const oauths = account.oauths.reduce(
+			(acc, oauth) => {
+				acc[oauth.provider] = true;
+				return acc;
+			},
+			{} as Record<string, boolean>,
+		);
+
 		return {
 			...account,
 			sessions: account.sessions,
 			registration: account.registrations,
+			oauths: {
+				discord: Boolean(oauths?.DISCORD),
+			},
 		};
 	}
 

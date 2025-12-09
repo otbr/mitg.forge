@@ -73,8 +73,10 @@ const DISCORD_CONFIG_SCHEMA = z.object({
 	DISCORD_ENABLED: z.coerce.boolean().default(false),
 	DISCORD_TOKEN: z.string().optional(),
 	DISCORD_CLIENT_ID: z.string().optional(),
+	DISCORD_CLIENT_SECRET: z.string().optional(),
 	DISCORD_REDIRECT_URI: z.url().optional(),
 	DISCORD_GUILD_ID: z.string().optional(),
+	DISCORD_API_URL: z.url().default("https://discord.com"),
 });
 
 const envSchema = z.object({
@@ -146,6 +148,7 @@ export const env = envSchema
 			"DISCORD_CLIENT_ID",
 			"DISCORD_GUILD_ID",
 			"DISCORD_REDIRECT_URI",
+			"DISCORD_CLIENT_SECRET",
 		];
 
 		for (const field of requiredFields) {

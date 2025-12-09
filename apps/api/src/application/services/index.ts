@@ -1,4 +1,5 @@
 export * from "./accountConfirmations";
+export * from "./accountOauth";
 export * from "./accounts";
 export * from "./accountTwoFactor";
 export * from "./audit";

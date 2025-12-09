@@ -140,6 +140,7 @@
 		"nodir",
 		"nomount",
 		"notcollected",
+		"oauths",
 		"offlinetraining",
 		"oldnames",
 		"oncreate",

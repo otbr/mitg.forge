@@ -216,6 +216,7 @@ export class AccountRepository {
 				email,
 			},
 			include: {
+				oauths: true,
 				sessions: true,
 				registrations: {
 					omit: {

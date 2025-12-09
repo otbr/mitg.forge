@@ -31,6 +31,8 @@
 		"@orpc/zod": "catalog:orpc",
 		"@prisma/adapter-mariadb": "^6.19.0",
 		"@prisma/client": "^6.19.0",
+		"axios": "^1.13.2",
+		"axios-retry": "^4.5.0",
 		"bullmq": "^5.65.1",
 		"discord.js": "^14.25.1",
 		"dotenv-flow": "^4.1.0",

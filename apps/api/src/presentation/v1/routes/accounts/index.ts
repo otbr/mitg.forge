@@ -8,6 +8,7 @@ import { detailsRoute } from "./details";
 import { emailRoutes } from "./email";
 import { loginRoute } from "./login";
 import { logoutRoute } from "./logout";
+import { oauthRouter } from "./oauth";
 import { accountPasswordRoutes } from "./password";
 import { accountRegistrationKey } from "./registrationKey";
 import { accountsStoreRoutes } from "./store";
@@ -25,4 +26,5 @@ export const accountsRouter = base.prefix("/accounts").tag("Accounts").router({
 	password: accountPasswordRoutes,
 	email: emailRoutes,
 	twoFactor: account2FARoutes,
+	oauth: oauthRouter,
 });

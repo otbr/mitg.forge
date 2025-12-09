@@ -119,6 +119,18 @@ export class UseCasesFactory {
 			TOKENS.AccountTwoFactorDisableUseCase,
 		);
 
+		const discordOauthLink = this.di.resolve(
+			TOKENS.AccountDiscordOauthLinkUseCase,
+		);
+
+		const discordOauthConfirmLink = this.di.resolve(
+			TOKENS.AccountDiscordOauthConfirmLinkUseCase,
+		);
+
+		const discordOauthUnlink = this.di.resolve(
+			TOKENS.AccountDiscordOauthUnlinkUseCase,
+		);
+
 		return {
 			create,
 			login,
@@ -145,6 +157,9 @@ export class UseCasesFactory {
 			twoFactorSetup,
 			twoFactorConfirm,
 			twoFactorDisable,
+			discordOauthLink,
+			discordOauthConfirmLink,
+			discordOauthUnlink,
 		} as const;
 	}
 

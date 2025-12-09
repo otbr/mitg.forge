@@ -1,6 +1,7 @@
 import type { InjectionToken } from "tsyringe";
 import type {
 	AccountConfirmationsService,
+	AccountOauthService,
 	AccountsService,
 	AccountTwoFactorService,
 	AuditService,
@@ -22,6 +23,9 @@ import type {
 	AccountCreateUseCase,
 	AccountDeleteCharacterUseCase,
 	AccountDetailsBySessionUseCase,
+	AccountDiscordOauthConfirmLinkUseCase,
+	AccountDiscordOauthLinkUseCase,
+	AccountDiscordOauthUnlinkUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
 	AccountGenerateEmailChangeUseCase,
@@ -57,7 +61,9 @@ import type {
 	WorldsListUseCase,
 } from "@/application/usecases";
 import type {
+	DiscordApiClient,
 	DiscordClient,
+	HttpClient,
 	Mailer,
 	OtsServerClient,
 	Prisma,
@@ -93,6 +99,7 @@ import type {
 import type { Outfit } from "@/domain/modules/outfit";
 import type {
 	AccountConfirmationsRepository,
+	AccountOauthRepository,
 	AccountRegistrationRepository,
 	AccountRepository,
 	AuditRepository,
@@ -126,6 +133,11 @@ export const TOKENS = {
 	EventSubscriber: token<Redis>("EventSubscriber"),
 	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
 	OtsServerClient: token<OtsServerClient>("OtsServerClient"),
+
+	HttpClient: token<HttpClient>("HttpClient"),
+	DiscordHttpClient: token<HttpClient>("DiscordHttpClient"),
+
+	DiscordApiClient: token<DiscordApiClient>("DiscordApiClient"),
 
 	DiscordClient: token<DiscordClient>("DiscordClient"),
 	DiscordBot: token<DiscordBot>("DiscordBot"),
@@ -182,6 +194,9 @@ export const TOKENS = {
 	ConfigLiveRepository: token<ConfigLiveRepository>("ConfigLiveRepository"),
 	ConfigRepository: token<ConfigRepository>("ConfigRepository"),
 	OtsServerRepository: token<OtsServerRepository>("OtsServerRepository"),
+	AccountOauthRepository: token<AccountOauthRepository>(
+		"AccountOauthRepository",
+	),
 
 	// Services
 	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
@@ -199,6 +214,7 @@ export const TOKENS = {
 	ConfigService: token<ConfigService>("ConfigService"),
 	LostAccountService: token<LostAccountService>("LostAccountService"),
 	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
+	AccountOauthService: token<AccountOauthService>("AccountOauthService"),
 
 	// UseCases
 	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
@@ -315,6 +331,17 @@ export const TOKENS = {
 	),
 	SessionCanBeAuthenticatedUseCase: token<SessionCanBeAuthenticatedUseCase>(
 		"SessionCanBeAuthenticatedUseCase",
+	),
+
+	AccountDiscordOauthLinkUseCase: token<AccountDiscordOauthLinkUseCase>(
+		"AccountDiscordOauthLinkUseCase",
+	),
+	AccountDiscordOauthConfirmLinkUseCase:
+		token<AccountDiscordOauthConfirmLinkUseCase>(
+			"AccountDiscordOauthConfirmLinkUseCase",
+		),
+	AccountDiscordOauthUnlinkUseCase: token<AccountDiscordOauthUnlinkUseCase>(
+		"AccountDiscordOauthUnlinkUseCase",
 	),
 
 	PlayerOutfitUseCase: token<PlayerOutfitUseCase>("PlayerOutfitUseCase"),
