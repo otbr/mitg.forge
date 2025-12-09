@@ -1,5 +1,6 @@
 export * from "./clients";
 export * from "./core";
+export * from "./discord";
 export * from "./jobs";
 export * from "./modules";
 export * from "./repositories";

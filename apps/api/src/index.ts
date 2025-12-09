@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { config as dotenv } from "dotenv-flow";
 import { container } from "tsyringe";
+import { bootstrapDiscord } from "@/domain/discord/bootstrap";
 import type { Logger } from "@/domain/modules";
 import { appFactory } from "@/infra/config/app";
 import { bootstrapContainer } from "@/infra/di/container";
@@ -18,6 +19,7 @@ bootstrapContainer();
 const logger = container.resolve<Logger>(TOKENS.RootLogger);
 
 if (import.meta.main) {
+	bootstrapDiscord();
 	bootstrapJobs();
 
 	const app = appFactory();

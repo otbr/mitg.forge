@@ -27,7 +27,7 @@ export class Cookies {
 		setCookie(this.httpContext, finalName, value, {
 			secure: true,
 			httpOnly: true,
-			sameSite: "Strict",
+			sameSite: "Lax",
 			...options,
 		});
 	}

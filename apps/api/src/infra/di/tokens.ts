@@ -56,9 +56,23 @@ import type {
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
-import type { Mailer, OtsServerClient, Prisma, Redis } from "@/domain/clients";
+import type {
+	DiscordClient,
+	Mailer,
+	OtsServerClient,
+	Prisma,
+	Redis,
+} from "@/domain/clients";
 import type { AppLivePublisher } from "@/domain/clients/live/types";
 import type { ExecutionContext } from "@/domain/context";
+import type {
+	DiscordAccountShowButtonHandler,
+	DiscordBot,
+	DiscordButtonsOrchestrator,
+	DiscordCommandsOrchestrator,
+	DiscordPingCommand,
+} from "@/domain/discord";
+import type { DiscordAccountCommand } from "@/domain/discord/commands/account";
 import type {
 	Cache,
 	CacheKeys,
@@ -112,6 +126,22 @@ export const TOKENS = {
 	EventSubscriber: token<Redis>("EventSubscriber"),
 	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
 	OtsServerClient: token<OtsServerClient>("OtsServerClient"),
+
+	DiscordClient: token<DiscordClient>("DiscordClient"),
+	DiscordBot: token<DiscordBot>("DiscordBot"),
+	DiscordCommandsOrchestrator: token<DiscordCommandsOrchestrator>(
+		"DiscordCommandsOrchestrator",
+	),
+	DiscordButtonsOrchestrator: token<DiscordButtonsOrchestrator>(
+		"DiscordButtonsOrchestrator",
+	),
+
+	DiscordPingCommand: token<DiscordPingCommand>("DiscordPingCommand"),
+	DiscordAccountCommand: token<DiscordAccountCommand>("DiscordAccountCommand"),
+
+	DiscordAccountShowButtonHandler: token<DiscordAccountShowButtonHandler>(
+		"DiscordAccountShowButtonHandler",
+	),
 
 	// Queues
 	EmailQueue: token<EmailQueue>("EmailQueue"),

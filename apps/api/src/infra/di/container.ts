@@ -6,6 +6,7 @@ import { env } from "@/infra/env";
 import {
 	registerClients,
 	registerCore,
+	registerDiscord,
 	registerJobs,
 	registerModules,
 	registerRepositories,
@@ -31,6 +32,7 @@ export function bootstrapContainer() {
 	registerModules();
 	registerRepositories();
 	registerServices();
+	registerDiscord();
 	registerUseCases();
 
 	global.__BOOTSTRAPPED__ = true;

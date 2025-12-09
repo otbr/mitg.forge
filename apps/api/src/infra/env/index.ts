@@ -69,6 +69,14 @@ const OUTFIT_CONFIG_SCHEMA = z.object({
 		.transform((value) => value.replace(/^\/+/, "").replace(/\/+$/, "")),
 });
 
+const DISCORD_CONFIG_SCHEMA = z.object({
+	DISCORD_ENABLED: z.coerce.boolean().default(false),
+	DISCORD_TOKEN: z.string().optional(),
+	DISCORD_CLIENT_ID: z.string().optional(),
+	DISCORD_REDIRECT_URI: z.url().optional(),
+	DISCORD_GUILD_ID: z.string().optional(),
+});
+
 const envSchema = z.object({
 	...FRONTEND_CONFIG_SCHEMA.shape,
 	...SERVER_CONFIG_SCHEMA.shape,
@@ -77,6 +85,7 @@ const envSchema = z.object({
 	...REDIS_CONFIG_SCHEMA.shape,
 	...MAILER_CONFIG_SCHEMA.shape,
 	...OUTFIT_CONFIG_SCHEMA.shape,
+	...DISCORD_CONFIG_SCHEMA.shape,
 	LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
 	SERVICE_NAME: z.string().default("miforge-api"),
 	PORT: z.coerce.number().default(4000),
@@ -126,6 +135,25 @@ export const env = envSchema
 						path: [field],
 					});
 				}
+			}
+		}
+	})
+	.superRefine((env, ctx) => {
+		if (!env.DISCORD_ENABLED) return;
+
+		const requiredFields: (keyof typeof env)[] = [
+			"DISCORD_TOKEN",
+			"DISCORD_CLIENT_ID",
+			"DISCORD_GUILD_ID",
+			"DISCORD_REDIRECT_URI",
+		];
+
+		for (const field of requiredFields) {
+			if (!env[field]) {
+				ctx.addIssue({
+					code: "custom",
+					message: `${field} is required when DISCORD_ENABLED is true`,
+				});
 			}
 		}
 	})
