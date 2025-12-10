@@ -1,4 +1,4 @@
-import type { accounts } from "generated/client";
+import type { accounts, OAuthProvider } from "generated/client";
 import { inject, injectable } from "tsyringe";
 import type { Prisma } from "@/domain/clients";
 import { TOKENS } from "@/infra/di/tokens";
@@ -26,6 +26,19 @@ export class AccountRepository {
 				id: accountId,
 			},
 			data: data,
+		});
+	}
+
+	async findAccountByProviderId(provider: OAuthProvider, providerId: string) {
+		return this.prisma.accounts.findFirst({
+			where: {
+				oauths: {
+					some: {
+						provider,
+						providerAccountId: providerId,
+					},
+				},
+			},
 		});
 	}
 

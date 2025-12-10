@@ -7,12 +7,20 @@ export const BUTTON_ID_PREFIX = {
 export type ButtonIdPrefix =
 	(typeof BUTTON_ID_PREFIX)[keyof typeof BUTTON_ID_PREFIX];
 
-export function encodePayload(payload: unknown): string {
+export function encodePayload(payload?: unknown): string {
+	if (!payload) {
+		return "";
+	}
+
 	const json = JSON.stringify(payload);
 	return Buffer.from(json, "utf-8").toString("base64");
 }
 
-export function decodePayload<T>(encoded: string): T | null {
+export function decodePayload<T>(encoded?: string): T | null {
+	if (!encoded) {
+		return null;
+	}
+
 	try {
 		const json = Buffer.from(encoded, "base64").toString("utf-8");
 		return JSON.parse(json) as T;
@@ -21,7 +29,10 @@ export function decodePayload<T>(encoded: string): T | null {
 	}
 }
 
-export function makeButtonId(prefix: ButtonIdPrefix, payload: unknown): string {
+export function makeButtonId(
+	prefix: ButtonIdPrefix,
+	payload?: unknown,
+): string {
 	const encodedPayload = encodePayload(payload);
 
 	return `${prefix}:${encodedPayload}`;
@@ -38,10 +49,6 @@ export function parseButtonId<TSchema extends z.ZodTypeAny>(data: {
 		throw new Error(
 			`Invalid prefix: expected ${data.expectedPrefix}, got ${prefix}`,
 		);
-	}
-
-	if (!encodedPayload) {
-		throw new Error("Missing payload in customId");
 	}
 
 	const raw = decodePayload<unknown>(encodedPayload);

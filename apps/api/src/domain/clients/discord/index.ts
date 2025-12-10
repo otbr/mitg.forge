@@ -3,6 +3,8 @@ import {
 	Events,
 	GatewayIntentBits,
 	type Interaction,
+	type MessageCreateOptions,
+	type MessagePayload,
 	REST,
 	Routes,
 	type TextChannel,
@@ -40,7 +42,7 @@ export class DiscordClient {
 
 	start() {
 		if (!env.DISCORD_ENABLED) {
-			this.logger.warn("Discord integration is disabled.");
+			this.logger.warn("[Discord] integration is disabled.");
 			return Promise.resolve();
 		}
 
@@ -124,7 +126,33 @@ export class DiscordClient {
 		this.interactionHandlers.push(handler);
 	}
 
-	async sendToChannel(channelId: string, content: string) {
+	async sendPrivateMessage(
+		userId: string,
+		content: string | MessagePayload | MessageCreateOptions,
+	) {
+		if (!env.DISCORD_ENABLED) {
+			this.logger.warn(
+				"[Discord] integration is disabled. Skipping sending message.",
+			);
+			return;
+		}
+
+		await this.start();
+
+		const user = await this.client.users.fetch(userId);
+
+		if (!user) {
+			this.logger.error(`[Discord] User with ID ${userId} not found.`);
+			return;
+		}
+
+		await user.send(typeof content === "string" ? { content } : content);
+	}
+
+	async sendToChannel(
+		channelId: string,
+		content: string | MessagePayload | MessageCreateOptions,
+	) {
 		if (!env.DISCORD_ENABLED) {
 			this.logger.warn(
 				"[Discord] integration is disabled. Skipping sending message.",

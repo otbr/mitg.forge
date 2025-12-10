@@ -1,15 +1,20 @@
 import { container, Lifecycle } from "tsyringe";
-import { DiscordClient } from "@/domain/clients";
 import {
+	DiscordAccountCommands,
 	DiscordAccountShowButtonHandler,
 	DiscordBot,
 	DiscordButtonsOrchestrator,
 	DiscordCommandsOrchestrator,
 	DiscordPingCommand,
-} from "@/domain/discord";
-import { DiscordAccountCommand } from "@/domain/discord/commands/account";
+} from "@/discord";
+import {
+	DiscordLinkedWithPermissionMiddleware,
+	DiscordRequireLinkedAccountMiddleware,
+	DiscordSessionMiddleware,
+} from "@/discord/middlewares";
+import { DiscordClient } from "@/domain/clients";
+import { TOKENS } from "@/infra/di/tokens";
 import { env } from "@/infra/env";
-import { TOKENS } from "../tokens";
 
 export const registerDiscord = () => {
 	container.register(
@@ -22,6 +27,24 @@ export const registerDiscord = () => {
 		TOKENS.DiscordBot,
 		{ useClass: DiscordBot },
 		{ lifecycle: env.isDev ? Lifecycle.ResolutionScoped : Lifecycle.Singleton },
+	);
+
+	container.register(
+		TOKENS.DiscordRequireLinkedAccountMiddleware,
+		{ useClass: DiscordRequireLinkedAccountMiddleware },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.DiscordLinkedWithPermissionMiddleware,
+		{ useClass: DiscordLinkedWithPermissionMiddleware },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.DiscordSessionMiddleware,
+		{ useClass: DiscordSessionMiddleware },
+		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 
 	container.register(
@@ -40,9 +63,10 @@ export const registerDiscord = () => {
 		{ useToken: DiscordPingCommand },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
+
 	container.register(
-		TOKENS.DiscordAccountCommand,
-		{ useToken: DiscordAccountCommand },
+		TOKENS.DiscordAccountCommands,
+		{ useClass: DiscordAccountCommands },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 

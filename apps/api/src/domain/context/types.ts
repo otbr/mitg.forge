@@ -9,4 +9,5 @@ export interface ExecutionContext {
 	requestId(): string | null;
 	session(): AuthenticatedSession;
 	sessionOrNull(): AuthenticatedSession | null;
+	setSession(session: AuthenticatedSession): void;
 }

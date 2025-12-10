@@ -33,7 +33,7 @@ export class AccountOauthService {
 	async requestDiscordLink() {
 		if (!env.DISCORD_ENABLED) {
 			throw new ORPCError("UNAVAILABLE", {
-				message: "Discord integration is disabled",
+				message: "[Discord] integration is disabled",
 			});
 		}
 
@@ -111,7 +111,7 @@ export class AccountOauthService {
 	async confirmDiscordLink(code: string, state: string) {
 		if (!env.DISCORD_ENABLED) {
 			throw new ORPCError("UNAVAILABLE", {
-				message: "Discord integration is disabled",
+				message: "[Discord] integration is disabled",
 			});
 		}
 

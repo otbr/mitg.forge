@@ -6,7 +6,7 @@ export const bootstrapDiscord = () => {
 	const logger = container.resolve(TOKENS.Logger);
 
 	if (!env.DISCORD_ENABLED) {
-		logger.info("Discord integration is disabled.");
+		logger.info("[Discord] integration is disabled.");
 		return;
 	}
 
@@ -18,7 +18,10 @@ export const bootstrapDiscord = () => {
 			logger.info("[Discord]: Discord bot started successfully");
 		})
 		.catch((err) => {
-			logger.error("[Discord]: Error starting Discord bot", { error: err });
+			logger.error("[Discord]: Error starting Discord bot", {
+				error: String(err),
+			});
+			console.error(err);
 		});
 
 	const shutdown = async (signal: string) => {
@@ -31,7 +34,7 @@ export const bootstrapDiscord = () => {
 			logger.error("[Discord]: Error stopping Discord bot", { error });
 		}
 
-		process.exit();
+		process.exit(0);
 	};
 
 	process.on("SIGINT", () => shutdown("SIGINT"));

@@ -1,4 +1,10 @@
+import { config as dotenv } from "dotenv-flow";
 import z from "zod";
+
+dotenv({
+	node_env: process.env.NODE_ENV || "development",
+	debug: true,
+});
 
 const SERVER_CONFIG_SCHEMA = z.object({
 	SERVER_HOST: z.string(),
@@ -46,7 +52,9 @@ const MAILER_CONFIG_SCHEMA = z.object({
 	MAILER_FROM_NAME: z.string().default("Mitg Suporte"),
 	MAILER_SMTP_HOST: z.string().optional(),
 	MAILER_SMTP_PORT: z.coerce.number().optional(),
-	MAILER_SMTP_SECURE: z.coerce.boolean().optional(),
+	MAILER_SMTP_SECURE: z
+		.transform((val) => val === "true" || val === "1")
+		.optional(),
 	MAILER_SMTP_USER: z.string().optional(),
 	MAILER_SMTP_PASS: z.string().optional(),
 
@@ -70,7 +78,9 @@ const OUTFIT_CONFIG_SCHEMA = z.object({
 });
 
 const DISCORD_CONFIG_SCHEMA = z.object({
-	DISCORD_ENABLED: z.coerce.boolean().default(false),
+	DISCORD_ENABLED: z
+		.transform((val) => val === "true" || val === "1")
+		.default(false),
 	DISCORD_TOKEN: z.string().optional(),
 	DISCORD_CLIENT_ID: z.string().optional(),
 	DISCORD_CLIENT_SECRET: z.string().optional(),
@@ -94,8 +104,12 @@ const envSchema = z.object({
 	NODE_ENV: z
 		.enum(["development", "production", "test"])
 		.default("development"),
-	isDev: z.boolean().default(process.env.NODE_ENV !== "production"),
-	isProd: z.boolean().default(process.env.NODE_ENV === "production"),
+	isDev: z
+		.transform((val) => val !== "production")
+		.default(process.env.NODE_ENV !== "production"),
+	isProd: z
+		.transform((val) => val === "production")
+		.default(process.env.NODE_ENV === "production"),
 });
 
 export const env = envSchema
@@ -161,7 +175,3 @@ export const env = envSchema
 		}
 	})
 	.parse(process.env);
-
-console.log("Loaded environment variables:", {
-	OUTFIT_FOLDER: env.OUTFIT_FOLDER,
-});
