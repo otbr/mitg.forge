@@ -15,6 +15,9 @@ export const AccountDetailsContractSchema = {
 			recoveryKey: true,
 			accountId: true,
 		}).nullable(),
+		oauths: z.object({
+			discord: z.boolean(),
+		}),
 	}),
 };
 

@@ -9,6 +9,9 @@ import {
 	AccountCreateUseCase,
 	AccountDeleteCharacterUseCase,
 	AccountDetailsBySessionUseCase,
+	AccountDiscordOauthConfirmLinkUseCase,
+	AccountDiscordOauthLinkUseCase,
+	AccountDiscordOauthUnlinkUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
 	AccountGenerateEmailChangeUseCase,
@@ -264,6 +267,24 @@ export function registerUseCases() {
 	container.register(
 		TOKENS.TibiaLoginUseCase,
 		{ useClass: TibiaLoginUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.AccountDiscordOauthLinkUseCase,
+		{ useClass: AccountDiscordOauthLinkUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.AccountDiscordOauthConfirmLinkUseCase,
+		{ useClass: AccountDiscordOauthConfirmLinkUseCase },
+		{ lifecycle: Lifecycle.ResolutionScoped },
+	);
+
+	container.register(
+		TOKENS.AccountDiscordOauthUnlinkUseCase,
+		{ useClass: AccountDiscordOauthUnlinkUseCase },
 		{ lifecycle: Lifecycle.ResolutionScoped },
 	);
 }

@@ -1,4 +1,10 @@
+import { config as dotenv } from "dotenv-flow";
 import z from "zod";
+
+dotenv({
+	node_env: process.env.NODE_ENV || "development",
+	debug: true,
+});
 
 const SERVER_CONFIG_SCHEMA = z.object({
 	SERVER_HOST: z.string(),
@@ -46,7 +52,10 @@ const MAILER_CONFIG_SCHEMA = z.object({
 	MAILER_FROM_NAME: z.string().default("Mitg Suporte"),
 	MAILER_SMTP_HOST: z.string().optional(),
 	MAILER_SMTP_PORT: z.coerce.number().optional(),
-	MAILER_SMTP_SECURE: z.coerce.boolean().optional(),
+	MAILER_SMTP_SECURE: z
+		.string()
+		.transform((val) => val === "true" || val === "1")
+		.optional(),
 	MAILER_SMTP_USER: z.string().optional(),
 	MAILER_SMTP_PASS: z.string().optional(),
 
@@ -69,6 +78,19 @@ const OUTFIT_CONFIG_SCHEMA = z.object({
 		.transform((value) => value.replace(/^\/+/, "").replace(/\/+$/, "")),
 });
 
+const DISCORD_CONFIG_SCHEMA = z.object({
+	DISCORD_ENABLED: z
+		.string()
+		.transform((val) => val === "true" || val === "1")
+		.default(false),
+	DISCORD_TOKEN: z.string().optional(),
+	DISCORD_CLIENT_ID: z.string().optional(),
+	DISCORD_CLIENT_SECRET: z.string().optional(),
+	DISCORD_REDIRECT_URI: z.url().optional(),
+	DISCORD_GUILD_ID: z.string().optional(),
+	DISCORD_API_URL: z.url().default("https://discord.com"),
+});
+
 const envSchema = z.object({
 	...FRONTEND_CONFIG_SCHEMA.shape,
 	...SERVER_CONFIG_SCHEMA.shape,
@@ -77,6 +99,7 @@ const envSchema = z.object({
 	...REDIS_CONFIG_SCHEMA.shape,
 	...MAILER_CONFIG_SCHEMA.shape,
 	...OUTFIT_CONFIG_SCHEMA.shape,
+	...DISCORD_CONFIG_SCHEMA.shape,
 	LOG_LEVEL: z.enum(["debug", "info", "warn", "error"]).default("info"),
 	SERVICE_NAME: z.string().default("miforge-api"),
 	PORT: z.coerce.number().default(4000),
@@ -129,8 +152,24 @@ export const env = envSchema
 			}
 		}
 	})
-	.parse(process.env);
+	.superRefine((env, ctx) => {
+		if (!env.DISCORD_ENABLED) return;
 
-console.log("Loaded environment variables:", {
-	OUTFIT_FOLDER: env.OUTFIT_FOLDER,
-});
+		const requiredFields: (keyof typeof env)[] = [
+			"DISCORD_TOKEN",
+			"DISCORD_CLIENT_ID",
+			"DISCORD_GUILD_ID",
+			"DISCORD_REDIRECT_URI",
+			"DISCORD_CLIENT_SECRET",
+		];
+
+		for (const field of requiredFields) {
+			if (!env[field]) {
+				ctx.addIssue({
+					code: "custom",
+					message: `${field} is required when DISCORD_ENABLED is true`,
+				});
+			}
+		}
+	})
+	.parse(process.env);

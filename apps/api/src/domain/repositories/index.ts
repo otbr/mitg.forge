@@ -1,6 +1,7 @@
 /* Export all repositories */
 // e.g., export * from "./user.repository";
 export * from "./account";
+export * from "./accountOauth";
 export * from "./accountRegistration";
 export * from "./audit";
 export * from "./config";

@@ -1,6 +1,8 @@
+import type { Interaction } from "discord.js";
 import type { InjectionToken } from "tsyringe";
 import type {
 	AccountConfirmationsService,
+	AccountOauthService,
 	AccountsService,
 	AccountTwoFactorService,
 	AuditService,
@@ -22,6 +24,9 @@ import type {
 	AccountCreateUseCase,
 	AccountDeleteCharacterUseCase,
 	AccountDetailsBySessionUseCase,
+	AccountDiscordOauthConfirmLinkUseCase,
+	AccountDiscordOauthLinkUseCase,
+	AccountDiscordOauthUnlinkUseCase,
 	AccountEditCharacterUseCase,
 	AccountFindCharacterUseCase,
 	AccountGenerateEmailChangeUseCase,
@@ -56,7 +61,28 @@ import type {
 	TibiaLoginUseCase,
 	WorldsListUseCase,
 } from "@/application/usecases";
-import type { Mailer, OtsServerClient, Prisma, Redis } from "@/domain/clients";
+import type {
+	DiscordAccountCommands,
+	DiscordAccountShowButtonHandler,
+	DiscordBot,
+	DiscordButtonsOrchestrator,
+	DiscordCommandsOrchestrator,
+	DiscordPingCommand,
+} from "@/discord";
+import type {
+	DiscordLinkedWithPermissionMiddleware,
+	DiscordRequireLinkedAccountMiddleware,
+	DiscordSessionMiddleware,
+} from "@/discord/middlewares";
+import type {
+	DiscordApiClient,
+	DiscordClient,
+	HttpClient,
+	Mailer,
+	OtsServerClient,
+	Prisma,
+	Redis,
+} from "@/domain/clients";
 import type { AppLivePublisher } from "@/domain/clients/live/types";
 import type { ExecutionContext } from "@/domain/context";
 import type {
@@ -79,6 +105,7 @@ import type {
 import type { Outfit } from "@/domain/modules/outfit";
 import type {
 	AccountConfirmationsRepository,
+	AccountOauthRepository,
 	AccountRegistrationRepository,
 	AccountRepository,
 	AuditRepository,
@@ -94,50 +121,42 @@ import type { EmailWorker } from "@/jobs/workers/email";
 
 export const token = <T>(desc: string) => Symbol(desc) as InjectionToken<T>;
 
-export const TOKENS = {
-	// context
-	HttpContext: token<HttpContext>("HttpContext"),
-	ExecutionContext: token<ExecutionContext>("ExecutionContext"),
+const DISCORD_TOKENS = {
+	DiscordInteraction: token<Interaction>("DiscordInteraction"),
+	DiscordHttpClient: token<HttpClient>("DiscordHttpClient"),
+	DiscordApiClient: token<DiscordApiClient>("DiscordApiClient"),
+	DiscordClient: token<DiscordClient>("DiscordClient"),
+	DiscordBot: token<DiscordBot>("DiscordBot"),
 
-	// Logger
-	Logger: token<Logger>("Logger"),
-	RootLogger: token<RootLogger>("RootLogger"),
+	DiscordRequireLinkedAccountMiddleware:
+		token<DiscordRequireLinkedAccountMiddleware>(
+			"DiscordRequireLinkedAccountMiddleware",
+		),
+	DiscordLinkedWithPermissionMiddleware:
+		token<DiscordLinkedWithPermissionMiddleware>(
+			"DiscordLinkedWithPermissionMiddleware",
+		),
+	DiscordSessionMiddleware: token<DiscordSessionMiddleware>(
+		"DiscordSessionMiddleware",
+	),
 
-	// Clients
-	Prisma: token<Prisma>("Prisma"),
-	Mailer: token<Mailer>("Mailer"),
-	Redis: token<Redis>("Redis"),
-	BullConnection: token<Redis>("BullConnection"),
-	EventCommander: token<Redis>("EventCommander"),
-	EventSubscriber: token<Redis>("EventSubscriber"),
-	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
-	OtsServerClient: token<OtsServerClient>("OtsServerClient"),
+	DiscordCommandsOrchestrator: token<DiscordCommandsOrchestrator>(
+		"DiscordCommandsOrchestrator",
+	),
+	DiscordButtonsOrchestrator: token<DiscordButtonsOrchestrator>(
+		"DiscordButtonsOrchestrator",
+	),
+	DiscordPingCommand: token<DiscordPingCommand>("DiscordPingCommand"),
+	DiscordAccountCommands: token<DiscordAccountCommands>(
+		"DiscordAccountCommands",
+	),
 
-	// Queues
-	EmailQueue: token<EmailQueue>("EmailQueue"),
+	DiscordAccountShowButtonHandler: token<DiscordAccountShowButtonHandler>(
+		"DiscordAccountShowButtonHandler",
+	),
+};
 
-	// Workers
-	EmailWorker: token<EmailWorker>("EmailWorker"),
-
-	// Utils
-	Cookies: token<Cookies>("Cookies"),
-	Pagination: token<Pagination>("Pagination"),
-	DetectionChanges: token<DetectionChanges>("DetectionChanges"),
-	PlayerNameDetection: token<PlayerNameDetection>("PlayerNameDetection"),
-	Cache: token<Cache>("Cache"),
-	CacheKeys: token<CacheKeys>("CacheKeys"),
-	RandomCode: token<RandomCode>("RandomCode"),
-	EmailLinks: token<EmailLinks>("EmailLinks"),
-	TokenHasher: token<TokenHasher>("TokenHasher"),
-	TwoFactorAuth: token<TwoFactorAuth>("TwoFactorAuth"),
-	Outfit: token<Outfit>("Outfit"),
-
-	// Crypto
-	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
-	JwtCrypto: token<JwtCrypto>("JwtCrypto"),
-	RecoveryKey: token<RecoveryKey>("RecoveryKey"),
-
-	// Repositories
+const REPOSITORIES_TOKENS = {
 	AccountRepository: token<AccountRepository>("AccountRepository"),
 	AccountRegistrationRepository: token<AccountRegistrationRepository>(
 		"AccountRegistrationRepository",
@@ -152,25 +171,30 @@ export const TOKENS = {
 	ConfigLiveRepository: token<ConfigLiveRepository>("ConfigLiveRepository"),
 	ConfigRepository: token<ConfigRepository>("ConfigRepository"),
 	OtsServerRepository: token<OtsServerRepository>("OtsServerRepository"),
-
-	// Services
-	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
-	AccountsService: token<AccountsService>("AccountsService"),
-	AccountConfirmationsService: token<AccountConfirmationsService>(
-		"AccountConfirmationsService",
+	AccountOauthRepository: token<AccountOauthRepository>(
+		"AccountOauthRepository",
 	),
-	AccountTwoFactorService: token<AccountTwoFactorService>(
-		"AccountTwoFactorService",
-	),
-	SessionService: token<SessionService>("SessionService"),
-	WorldsService: token<WorldsService>("WorldsService"),
-	PlayersService: token<PlayersService>("PlayersService"),
-	AuditService: token<AuditService>("AuditService"),
-	ConfigService: token<ConfigService>("ConfigService"),
-	LostAccountService: token<LostAccountService>("LostAccountService"),
-	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
+};
 
-	// UseCases
+const UTILS_TOKENS = {
+	Cookies: token<Cookies>("Cookies"),
+	Pagination: token<Pagination>("Pagination"),
+	DetectionChanges: token<DetectionChanges>("DetectionChanges"),
+	PlayerNameDetection: token<PlayerNameDetection>("PlayerNameDetection"),
+	Cache: token<Cache>("Cache"),
+	CacheKeys: token<CacheKeys>("CacheKeys"),
+	RandomCode: token<RandomCode>("RandomCode"),
+	EmailLinks: token<EmailLinks>("EmailLinks"),
+	TokenHasher: token<TokenHasher>("TokenHasher"),
+	TwoFactorAuth: token<TwoFactorAuth>("TwoFactorAuth"),
+	Outfit: token<Outfit>("Outfit"),
+	// Crypto
+	HasherCrypto: token<HasherCrypto>("HasherCrypto"),
+	JwtCrypto: token<JwtCrypto>("JwtCrypto"),
+	RecoveryKey: token<RecoveryKey>("RecoveryKey"),
+};
+
+const USECASES_TOKENS = {
 	AccountLoginUseCase: token<AccountLoginUseCase>("LoginUseCase"),
 	AccountDetailsBySessionUseCase: token<AccountDetailsBySessionUseCase>(
 		"AccountDetailsBySessionUseCase",
@@ -270,9 +294,7 @@ export const TOKENS = {
 		token<LostAccountChangeEmailWithRecoveryKeyUseCase>(
 			"LostAccountChangeEmailWithRecoveryKeyUseCase",
 		),
-
 	WorldsListUseCase: token<WorldsListUseCase>("WorldsListUseCase"),
-
 	ConfigInfoUseCase: token<ConfigInfoUseCase>("ConfigInfoUseCase"),
 	ConfigUpdateUseCase: token<ConfigUpdateUseCase>("ConfigUpdateUseCase"),
 
@@ -286,9 +308,84 @@ export const TOKENS = {
 	SessionCanBeAuthenticatedUseCase: token<SessionCanBeAuthenticatedUseCase>(
 		"SessionCanBeAuthenticatedUseCase",
 	),
-
+	AccountDiscordOauthLinkUseCase: token<AccountDiscordOauthLinkUseCase>(
+		"AccountDiscordOauthLinkUseCase",
+	),
+	AccountDiscordOauthConfirmLinkUseCase:
+		token<AccountDiscordOauthConfirmLinkUseCase>(
+			"AccountDiscordOauthConfirmLinkUseCase",
+		),
+	AccountDiscordOauthUnlinkUseCase: token<AccountDiscordOauthUnlinkUseCase>(
+		"AccountDiscordOauthUnlinkUseCase",
+	),
 	PlayerOutfitUseCase: token<PlayerOutfitUseCase>("PlayerOutfitUseCase"),
 	PlayerOutfitsUseCase: token<PlayerOutfitsUseCase>("PlayerOutfitsUseCase"),
-
 	TibiaLoginUseCase: token<TibiaLoginUseCase>("TibiaLoginUseCase"),
+};
+
+const SERVICES_TOKENS = {
+	TibiaClientService: token<TibiaClientService>("TibiaClientService"),
+	AccountsService: token<AccountsService>("AccountsService"),
+	AccountConfirmationsService: token<AccountConfirmationsService>(
+		"AccountConfirmationsService",
+	),
+	AccountTwoFactorService: token<AccountTwoFactorService>(
+		"AccountTwoFactorService",
+	),
+	SessionService: token<SessionService>("SessionService"),
+	WorldsService: token<WorldsService>("WorldsService"),
+	PlayersService: token<PlayersService>("PlayersService"),
+	AuditService: token<AuditService>("AuditService"),
+	ConfigService: token<ConfigService>("ConfigService"),
+	LostAccountService: token<LostAccountService>("LostAccountService"),
+	RecoveryKeyService: token<RecoveryKeyService>("RecoveryKeyService"),
+	AccountOauthService: token<AccountOauthService>("AccountOauthService"),
+};
+
+const QUEUE_AND_WORKERS_TOKENS = {
+	EmailQueue: token<EmailQueue>("EmailQueue"),
+	EmailWorker: token<EmailWorker>("EmailWorker"),
+};
+
+const CLIENTS_TOKENS = {
+	Prisma: token<Prisma>("Prisma"),
+	Mailer: token<Mailer>("Mailer"),
+	Redis: token<Redis>("Redis"),
+	BullConnection: token<Redis>("BullConnection"),
+	EventCommander: token<Redis>("EventCommander"),
+	EventSubscriber: token<Redis>("EventSubscriber"),
+	AppLivePublisher: token<AppLivePublisher>("AppLivePublisher"),
+	OtsServerClient: token<OtsServerClient>("OtsServerClient"),
+	HttpClient: token<HttpClient>("HttpClient"),
+};
+
+export const TOKENS = {
+	// context
+	HttpContext: token<HttpContext>("HttpContext"),
+	ExecutionContext: token<ExecutionContext>("ExecutionContext"),
+
+	// Logger
+	Logger: token<Logger>("Logger"),
+	RootLogger: token<RootLogger>("RootLogger"),
+
+	// Discord
+	...DISCORD_TOKENS,
+
+	// Clients
+	...CLIENTS_TOKENS,
+
+	// Queues && Workers
+	...QUEUE_AND_WORKERS_TOKENS,
+
+	// Utils
+	...UTILS_TOKENS,
+
+	// Repositories
+	...REPOSITORIES_TOKENS,
+
+	// Services
+	...SERVICES_TOKENS,
+
+	// UseCases
+	...USECASES_TOKENS,
 } as const;

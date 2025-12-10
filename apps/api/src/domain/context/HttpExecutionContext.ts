@@ -124,4 +124,8 @@ export class HttpExecutionContext implements ExecutionContext {
 
 		return session;
 	}
+
+	setSession(session: AuthenticatedSession): void {
+		this.httpContext.set("session", session);
+	}
 }

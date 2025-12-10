@@ -2,6 +2,7 @@ import { Section } from "@/ui/Section";
 import { SectionHeader } from "@/ui/Section/Header";
 import { InnerSection } from "@/ui/Section/Inner";
 import { AccountDetailsBadges } from "./badges";
+import { AccountDetailsDiscordOauth } from "./discord";
 import { AccountDetailGeneralInformation } from "./general_information";
 import { AccountDetailsHistory } from "./history";
 import { AccountDetailsProducts } from "./products";
@@ -21,6 +22,7 @@ export const AccountDetailsSection = () => {
 				<AccountDetailsHistory />
 				<AccountDetailsRegistration />
 				<AccountDetailsTwoFactor />
+				<AccountDetailsDiscordOauth />
 			</InnerSection>
 		</Section>
 	);

@@ -32,7 +32,7 @@ export const ButtonImageAsLink = forwardRef<HTMLAnchorElement, Props>(
 			<a
 				ref={ref}
 				className={cn(
-					`${classNameProp} hover:filter-hover line-clamp-1 flex cursor-pointer items-center justify-center border-none bg-transparent p-0 font-fondamento text-black capitalize transition-all disabled:cursor-not-allowed disabled:opacity-80`,
+					`${classNameProp} hover:filter-hover fondamento-title line-clamp-1 flex cursor-pointer items-center justify-center border-none bg-transparent p-0 font-fondamento text-black capitalize transition-all disabled:cursor-not-allowed disabled:opacity-80`,
 					{
 						"h-[25px] w-[135px] text-sm":
 							variant === "red" || variant === "info" || variant === "green",
